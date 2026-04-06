@@ -5,7 +5,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --font-involve: 'Involve', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  /* --font-involve задаётся в layout.js через next/font/local (Involve.woff2) */
   /* Как в next/frontend/src/app/globals.css — макет Frame1 */
   --sat: env(safe-area-inset-top, 0px);
   --sar: env(safe-area-inset-right, 0px);

@@ -1,15 +1,31 @@
 import localFont from "next/font/local";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
+/** Запасной стек, если Involve не подгрузится (Geist из репозитория убран) */
+const interFallback = Inter({
+  subsets: ["latin", "cyrillic"],
   variable: "--font-geist-sans",
-  weight: "100 900",
+  display: "swap",
 });
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
+
+/**
+ * Involve — статические TTF из app/fonts (Regular / Medium / SemiBold / Bold + Oblique).
+ * Веса совпадают с типичной шкалой Figma: Regular 400, Medium 500, SemiBold 600, Bold 700.
+ */
+const involve = localFont({
+  src: [
+    { path: "./fonts/Involve-Regular.ttf", weight: "400", style: "normal" },
+    { path: "./fonts/Involve-Oblique.ttf", weight: "400", style: "italic" },
+    { path: "./fonts/Involve-Medium.ttf", weight: "500", style: "normal" },
+    { path: "./fonts/Involve-MediumOblique.ttf", weight: "500", style: "italic" },
+    { path: "./fonts/Involve-SemiBold.ttf", weight: "600", style: "normal" },
+    { path: "./fonts/Involve-SemiBoldOblique.ttf", weight: "600", style: "italic" },
+    { path: "./fonts/Involve-Bold.ttf", weight: "700", style: "normal" },
+    { path: "./fonts/Involve-BoldOblique.ttf", weight: "700", style: "italic" },
+  ],
+  variable: "--font-involve",
+  display: "swap",
 });
 
 export const metadata = {
@@ -21,8 +37,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ru">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        style={{ fontFamily: 'var(--font-involve), var(--font-geist-sans), system-ui, sans-serif' }}
+        className={`${involve.variable} ${interFallback.variable} subpixel-antialiased`}
+        style={{
+          fontFamily: "var(--font-involve), var(--font-geist-sans), system-ui, sans-serif",
+          fontSynthesis: "none",
+        }}
       >
         {children}
       </body>

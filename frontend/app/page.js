@@ -1,7 +1,17 @@
+import { Suspense } from 'react';
+import HomeClient from './HomeClient';
+
 export default function Home() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-neutral-50 text-neutral-800">
-      <p className="text-sm">learning — фронт готов к разработке</p>
-    </main>
+    <Suspense
+      fallback={
+        <div
+          className="fixed inset-0 z-[9999] bg-white"
+          aria-hidden
+        />
+      }
+    >
+      <HomeClient />
+    </Suspense>
   );
 }

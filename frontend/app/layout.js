@@ -22,6 +22,7 @@ export default function RootLayout({ children }) {
     <html lang="ru">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        style={{ fontFamily: 'var(--font-involve), var(--font-geist-sans), system-ui, sans-serif' }}
       >
         {children}
       </body>

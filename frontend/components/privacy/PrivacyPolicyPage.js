@@ -16,10 +16,14 @@ function CollapseIcon() {
   );
 }
 
-export default function PrivacyPolicyPage() {
+export default function PrivacyPolicyPage({ onCollapse }) {
   const router = useRouter();
 
   const handleCollapse = () => {
+    if (typeof onCollapse === 'function') {
+      onCollapse();
+      return;
+    }
     if (typeof window !== 'undefined' && window.history.length > 1) {
       router.back();
     } else {

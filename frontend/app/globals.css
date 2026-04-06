@@ -5,6 +5,15 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --font-involve: 'Involve', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  /* Как в next/frontend/src/app/globals.css — макет Frame1 */
+  --sat: env(safe-area-inset-top, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --frame-width: 400px;
+  --header-top: 10px;
+  --header-zone: 50px;
 }
 
 @media (prefers-color-scheme: dark) {

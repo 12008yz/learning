@@ -3,10 +3,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import LoadingScreen from '@/components/LoadingScreen';
-import PrivacyPolicyPage from '@/components/privacy/PrivacyPolicyPage';
+import HomePage from '@/components/pages/HomePage';
 
 export default function HomeClient() {
   const searchParams = useSearchParams();
+  /** Сначала политика; после «сворачивание окна» — лендинг */
+  const [privacyCollapsed, setPrivacyCollapsed] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [loadingProgress, setLoadingProgress] = useState(0);
   const isCompleteRef = useRef(false);
@@ -149,7 +151,10 @@ export default function HomeClient() {
           position: showAppLoading ? 'absolute' : undefined,
         }}
       >
-        <PrivacyPolicyPage />
+        <HomePage
+          privacyCollapsed={privacyCollapsed}
+          onPrivacyCollapse={() => setPrivacyCollapsed(true)}
+        />
       </main>
     </div>
   );

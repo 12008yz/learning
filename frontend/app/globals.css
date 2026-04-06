@@ -13,7 +13,12 @@
   --sal: env(safe-area-inset-left, 0px);
   --frame-width: 400px;
   --header-top: 10px;
+  /** Высота круглых кнопок в шапке (как в next Header) */
+  --header-height: 40px;
+  /** Уведомления ниже шапки с отступом 10px — как в Frame4/5 */
+  --notification-top: calc(var(--header-top) + var(--header-height) + 10px);
   --header-zone: 50px;
+  --sab: env(safe-area-inset-bottom, 0px);
 }
 
 @media (prefers-color-scheme: dark) {

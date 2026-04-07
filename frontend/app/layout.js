@@ -1,17 +1,9 @@
 import localFont from "next/font/local";
-import { Inter } from "next/font/google";
 import "./globals.css";
-
-/** Запасной стек, если Involve не подгрузится (Geist из репозитория убран) */
-const interFallback = Inter({
-  subsets: ["latin", "cyrillic"],
-  variable: "--font-geist-sans",
-  display: "swap",
-});
 
 /**
  * Involve — статические TTF из app/fonts (Regular / Medium / SemiBold / Bold + Oblique).
- * Веса совпадают с типичной шкалой Figma: Regular 400, Medium 500, SemiBold 600, Bold 700.
+ * Веса: Regular 400, Medium 500, SemiBold 600, Bold 700.
  */
 const involve = localFont({
   src: [
@@ -37,9 +29,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ru">
       <body
-        className={`${involve.variable} ${interFallback.variable} subpixel-antialiased`}
+        className={`${involve.variable} subpixel-antialiased`}
         style={{
-          fontFamily: "var(--font-involve), var(--font-geist-sans), system-ui, sans-serif",
+          fontFamily: "var(--font-involve), system-ui, sans-serif",
           fontSynthesis: "none",
         }}
       >

@@ -423,8 +423,8 @@ export default function ConsultationLandingPage() {
                   maxWidth: '100%',
                   height: 50,
                   minHeight: 50,
-                  paddingLeft: 15,
-                  paddingRight: 15,
+                  paddingLeft: 10,
+                  paddingRight: 10,
                   boxSizing: 'border-box',
                   borderColor: privacyAccepted
                     ? privacyBorderMuted
@@ -442,7 +442,7 @@ export default function ConsultationLandingPage() {
                   style={{
                     width: 16,
                     height: 16,
-                    marginRight: 10,
+                    marginRight: 8,
                     borderColor: privacyAccepted
                       ? 'transparent'
                       : privacyShowStrongBorder
@@ -453,8 +453,12 @@ export default function ConsultationLandingPage() {
                 >
                   {privacyAccepted ? <ConsentCheckIcon /> : null}
                 </span>
-                <span className="text-[14px] font-medium leading-[105%] text-[#101010]" style={involve}>
-                  Я, полностью соглашаюсь с условиями{' '}
+                <span
+                  className="text-[14px] font-medium leading-[105%] text-[#101010]"
+                  style={{ ...involve, flex: 1, minWidth: 0 }}
+                >
+                  Я, полностью соглашаюсь с условиями
+                  <br />
                   <Link
                     href={PRIVACY_HREF}
                     className="text-[#2563eb] underline decoration-solid [text-underline-offset:3px]"

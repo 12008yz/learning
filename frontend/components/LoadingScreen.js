@@ -9,7 +9,7 @@ const LOGO_PATH =
 export default function LoadingScreen({ progress = 0 }) {
   return (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center overflow-y-auto overflow-x-hidden bg-white"
+      className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden bg-white"
       style={{
         paddingTop: 'var(--sat, 0px)',
         paddingBottom: 'var(--sab, 0px)',

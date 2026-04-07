@@ -222,7 +222,7 @@ export default function ConsultationLandingPage() {
 
   return (
     <div
-      className="fixed inset-0 z-[9999] flex flex-col items-center overflow-x-hidden overflow-y-auto bg-[#F5F5F5]"
+      className="fixed inset-0 z-[9999] flex flex-col items-center overflow-hidden bg-[#F5F5F5]"
       style={{
         height: '100dvh',
         boxSizing: 'border-box',
@@ -313,7 +313,7 @@ export default function ConsultationLandingPage() {
             paddingLeft: 15,
             boxSizing: 'border-box',
             gap: 5,
-            overflow: 'auto',
+            overflow: 'hidden',
           }}
         >
           <h1

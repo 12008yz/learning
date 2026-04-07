@@ -20,7 +20,7 @@ export default function BaseModal({
 
   return (
     <div
-      className="fixed inset-0 z-[10000] flex items-center justify-center overflow-y-auto overflow-x-hidden"
+      className="fixed inset-0 z-[10000] flex items-center justify-center overflow-hidden"
       style={{
         background: backdropBlur ? '#F5F5F5' : 'rgba(0, 0, 0, 0.5)',
         backdropFilter: backdropBlur ? 'blur(12.5px)' : 'none',

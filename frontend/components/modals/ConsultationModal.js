@@ -1,33 +1,40 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import CloseIcon from '@/components/common/CloseIcon';
 import { HINT_TOP } from '@/components/common/ClickOutsideHint';
 
-function SelectedArrowIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
-      <path d="M-3.49691e-07 8C-2.80529e-07 9.58225 0.469192 11.129 1.34824 12.4446C2.22729 13.7602 3.47672 14.7855 4.93853 15.391C6.40034 15.9965 8.00887 16.155 9.56072 15.8463C11.1126 15.5376 12.538 14.7757 13.6569 13.6569C14.7757 12.538 15.5376 11.1126 15.8463 9.56072C16.155 8.00887 15.9965 6.40034 15.391 4.93853C14.7855 3.47672 13.7602 2.22729 12.4446 1.34824C11.129 0.469192 9.58225 5.34821e-07 8 6.03983e-07C5.87895 0.00224088 3.84542 0.845815 2.34562 2.34562C0.845813 3.84543 0.00223942 5.87895 -3.49691e-07 8ZM7.20461 4.48769L10.2815 7.56461C10.3388 7.62177 10.3841 7.68964 10.4151 7.76434C10.4461 7.83905 10.462 7.91913 10.462 8C10.462 8.08087 10.4461 8.16095 10.4151 8.23565C10.3841 8.31036 10.3388 8.37823 10.2815 8.43538L7.20461 11.5123C7.08914 11.6278 6.93253 11.6926 6.76923 11.6926C6.60593 11.6926 6.44932 11.6278 6.33384 11.5123C6.21837 11.3968 6.1535 11.2402 6.1535 11.0769C6.1535 10.9136 6.21837 10.757 6.33384 10.6415L8.97615 8L6.33384 5.35846C6.27667 5.30129 6.23132 5.23341 6.20037 5.1587C6.16943 5.084 6.1535 5.00393 6.1535 4.92308C6.1535 4.84222 6.16943 4.76215 6.20037 4.68745C6.23132 4.61274 6.27667 4.54487 6.33384 4.48769C6.39102 4.43052 6.4589 4.38516 6.5336 4.35422C6.6083 4.32328 6.68837 4.30735 6.76923 4.30735C6.85009 4.30735 6.93015 4.32328 7.00486 4.35422C7.07956 4.38516 7.14744 4.43052 7.20461 4.48769Z" fill="#101010"/>
-    </svg>
-  );
-}
+const involve = {
+  fontFamily: 'var(--font-involve), system-ui, sans-serif',
+  fontStyle: 'normal',
+  fontWeight: 500,
+  fontSynthesis: 'none',
+};
 
-function UnselectedArrowIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
-      <path d="M-3.49691e-07 8C-2.80529e-07 9.58225 0.469191 11.129 1.34824 12.4446C2.22729 13.7602 3.47672 14.7855 4.93853 15.391C6.40034 15.9965 8.00887 16.155 9.56072 15.8463C11.1126 15.5376 12.538 14.7757 13.6569 13.6569C14.7757 12.538 15.5376 11.1126 15.8463 9.56072C16.155 8.00887 15.9965 6.40034 15.391 4.93853C14.7855 3.47672 13.7602 2.22729 12.4446 1.34824C11.129 0.469191 9.58225 -4.18853e-07 8 -3.49691e-07C5.87903 0.00249074 3.84565 0.846145 2.3459 2.3459C0.846145 3.84565 0.00249042 5.87903 -3.49691e-07 8ZM15.0588 8C15.0588 9.3961 14.6448 10.7609 13.8692 11.9217C13.0936 13.0825 11.9911 13.9872 10.7013 14.5215C9.41146 15.0558 7.99217 15.1956 6.62289 14.9232C5.25361 14.6508 3.99585 13.9785 3.00866 12.9913C2.02146 12.0041 1.34918 10.7464 1.07681 9.37711C0.804443 8.00783 0.944231 6.58854 1.4785 5.2987C2.01276 4.00887 2.91751 2.90644 4.07833 2.1308C5.23914 1.35517 6.60389 0.941176 8 0.941176C9.87148 0.943252 11.6657 1.68761 12.989 3.01095C14.3124 4.33429 15.0567 6.12852 15.0588 8ZM6.41255 4.53019C6.50078 4.44207 6.62039 4.39257 6.7451 4.39257C6.8698 4.39257 6.98941 4.44207 7.07764 4.53019L10.2149 7.66745C10.303 7.75568 10.3525 7.87529 10.3525 8C10.3525 8.1247 10.303 8.24431 10.2149 8.33255L7.07765 11.4698C6.98844 11.5529 6.87045 11.5982 6.74853 11.596C6.62662 11.5939 6.5103 11.5445 6.42408 11.4583C6.33786 11.372 6.28847 11.2557 6.28632 11.1338C6.28417 11.0119 6.32942 10.8939 6.41255 10.8047L9.21647 8L6.41255 5.19529C6.32442 5.10706 6.27492 4.98745 6.27492 4.86274C6.27492 4.73804 6.32442 4.61843 6.41255 4.53019Z" fill="#101010" fillOpacity="0.5"/>
-    </svg>
-  );
-}
+/** Как карточка мастера в OrderCreationLandingPage (Figma) */
+const cardTitleStyle = {
+  ...involve,
+  width: 330,
+  maxWidth: '100%',
+  height: 20,
+  minHeight: 20,
+  fontSize: 18,
+  lineHeight: '110%',
+  color: '#101010',
+  display: 'flex',
+  alignItems: 'center',
+  marginBottom: 10,
+};
 
-function DisabledCrossIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
-      <circle cx="8" cy="8" r="6.5" stroke="#101010" strokeWidth="1" fill="none" />
-      <path d="M5.5 5.5L10.5 10.5M10.5 5.5L5.5 10.5" stroke="#101010" strokeWidth="1" strokeLinecap="round" />
-    </svg>
-  );
-}
+const cardSubtitleStyle = {
+  ...involve,
+  width: 330,
+  maxWidth: '100%',
+  minHeight: 15,
+  fontSize: 14,
+  lineHeight: '110%',
+  color: 'rgba(16, 16, 16, 0.5)',
+  marginBottom: 20,
+};
 
 function CollapseIcon() {
   return (
@@ -42,18 +49,45 @@ function CollapseIcon() {
   );
 }
 
+/** Чёрный круг с белым «!» — ошибка поля */
+function FieldErrorIcon() {
+  return (
+    <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#101010]" aria-hidden>
+      <span className="text-[10px] font-bold leading-none text-white" style={involve}>
+        !
+      </span>
+    </span>
+  );
+}
+
+/** Серый круг с белой галочкой — валидное поле */
+function FieldSuccessIcon() {
+  return (
+    <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[rgba(16,16,16,0.35)]" aria-hidden>
+      <svg width="8" height="6" viewBox="0 0 8 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M1 3L3 5L7 1" stroke="#FFFFFF" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </span>
+  );
+}
+
+function isNameValid(name) {
+  return name.trim().length >= 2;
+}
+
 export default function ConsultationModal({ isOpen, onClose, onComplete }) {
-  const [step, setStep] = useState('contact-method');
+  const [name, setName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('+7 ');
-  const [selectedMethod, setSelectedMethod] = useState(null);
+  const [submitAttempted, setSubmitAttempted] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [shouldRender, setShouldRender] = useState(false);
+
   useEffect(() => {
     if (!isOpen) return;
     setShouldRender(true);
-    setStep('contact-method');
+    setName('');
     setPhoneNumber('+7 ');
-    setSelectedMethod(null);
+    setSubmitAttempted(false);
     requestAnimationFrame(() => setIsAnimating(true));
   }, [isOpen]);
 
@@ -69,7 +103,17 @@ export default function ConsultationModal({ isOpen, onClose, onComplete }) {
     return formatted;
   }, []);
 
-  const isPhoneValid = useMemo(() => phoneNumber.replace(/\D/g, '').length === 11, [phoneNumber]);
+  const phoneValid = useMemo(() => phoneNumber.replace(/\D/g, '').length === 11, [phoneNumber]);
+  const nameValid = useMemo(() => isNameValid(name), [name]);
+  const formValid = nameValid && phoneValid;
+
+  /** Как «Формирование» на OrderCreationLandingPage: сначала активная чёрная кнопка; после попытки с ошибкой — светлая, пока форма невалидна */
+  const confirmButtonSolid = !submitAttempted || formValid;
+
+  const nameShowError = submitAttempted && !nameValid;
+  const phoneShowError = submitAttempted && !phoneValid;
+  const nameShowSuccess = nameValid && name.trim().length > 0;
+  const phoneShowSuccess = phoneValid;
 
   const closeWithAnimation = useCallback(() => {
     setIsAnimating(false);
@@ -80,24 +124,24 @@ export default function ConsultationModal({ isOpen, onClose, onComplete }) {
   }, [onClose]);
 
   const handleSubmit = useCallback(() => {
-    if (typeof onComplete === 'function') onComplete({ phone: phoneNumber, method: selectedMethod });
-    closeWithAnimation();
-  }, [closeWithAnimation, onComplete, phoneNumber, selectedMethod]);
-
-  const handleBack = useCallback((e) => {
-    if (e) e.stopPropagation();
-    if (step === 'phone') {
-      setStep('contact-method');
+    if (!formValid) {
+      setSubmitAttempted(true);
       return;
     }
+    if (typeof onComplete === 'function') onComplete({ name: name.trim(), phone: phoneNumber });
     closeWithAnimation();
-  }, [closeWithAnimation, step]);
+  }, [closeWithAnimation, formValid, name, onComplete, phoneNumber]);
 
   if (!isOpen && !shouldRender) return null;
 
+  const borderDefault = '1px solid rgba(16, 16, 16, 0.25)';
+  const borderError = '1px solid #101010';
+  const borderName = nameShowError ? borderError : borderDefault;
+  const borderPhone = phoneShowError ? borderError : borderDefault;
+
   return (
     <div
-      className="fixed inset-0 z-[9999] flex flex-col items-center overflow-hidden bg-[#F5F5F5] cursor-pointer"
+      className="fixed inset-0 z-[9999] flex flex-col items-center overflow-hidden cursor-pointer bg-[#F5F5F5]"
       style={{
         opacity: isAnimating ? 1 : 0,
         transition: 'opacity 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
@@ -109,13 +153,13 @@ export default function ConsultationModal({ isOpen, onClose, onComplete }) {
       onClick={closeWithAnimation}
     >
       <div
-        className="relative w-full max-w-[400px] bg-[#F5F5F5] flex flex-col h-full overflow-hidden"
+        className="relative flex h-full w-full max-w-[400px] flex-col overflow-hidden bg-[#F5F5F5]"
         style={{
           transform: isAnimating ? 'scale(1)' : 'scale(0.95)',
           transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
         }}
       >
-        <div className="flex-shrink-0 relative cursor-pointer" style={{ minHeight: '105px' }}>
+        <div className="relative flex-shrink-0 cursor-pointer" style={{ minHeight: '105px' }}>
           <div className="absolute left-0 right-0" style={{ top: HINT_TOP, left: 20, right: 20 }}>
             <button
               type="button"
@@ -123,89 +167,97 @@ export default function ConsultationModal({ isOpen, onClose, onComplete }) {
               className="box-border flex h-10 max-w-[175px] items-center gap-2 rounded-[20px] border border-white/50 bg-white pl-2 pr-3 backdrop-blur-[5px] transition-opacity hover:opacity-90"
             >
               <CollapseIcon />
-              <span className="text-[12px] leading-[40px] text-[rgba(16,16,16,0.5)]">сворачивание окна</span>
+              <span className="text-[12px] leading-[40px] text-[rgba(16,16,16,0.5)]" style={{ ...involve, fontSize: 12 }}>
+                сворачивание окна
+              </span>
             </button>
           </div>
         </div>
 
         <div
-          className="flex flex-col rounded-[20px] bg-white mx-[5%]"
-          style={{ width: 360, maxWidth: 360, marginLeft: 'auto', marginRight: 'auto', marginTop: 'auto', padding: 15 }}
+          className="mx-auto mt-auto flex w-[360px] max-w-[90%] flex-col rounded-[20px] bg-white"
+          style={{ padding: 15, marginBottom: 0 }}
           onClick={(e) => e.stopPropagation()}
         >
-          <div style={{ fontSize: 20, lineHeight: '125%', color: '#101010', marginBottom: 15 }}>Консультация</div>
-          <div
-            style={{
-              width: 330,
-              height: 15,
-              fontFamily: 'var(--font-involve), system-ui, sans-serif',
-              fontStyle: 'normal',
-              fontWeight: 500,
-              fontSize: 14,
-              lineHeight: '110%',
-              color: 'rgba(16, 16, 16, 0.5)',
-              marginBottom: 20,
-            }}
-          >
+          <h2 className="m-0 flex max-w-full items-center self-stretch" style={cardTitleStyle}>
+            Консультирование
+          </h2>
+          <p className="m-0 flex max-w-full items-center self-stretch" style={cardSubtitleStyle}>
             Рекламы нет, только ваши вопросы{' '}
             <span style={{ color: '#EF4444' }} aria-hidden>
               ❣️
             </span>
-          </div>
+          </p>
 
-          {step === 'contact-method' ? (
-            <div className="flex flex-col gap-[5px]" style={{ marginBottom: 20 }}>
-              <div className="rounded-[10px] flex items-center justify-between px-[15px]" style={{ height: 50, border: '1px solid rgba(16,16,16,0.25)', opacity: 0.25 }}>
-                <span style={{ fontSize: 16, lineHeight: '125%', color: 'rgba(16,16,16,0.5)' }}>Написать нам в «Max»</span>
-                <DisabledCrossIcon />
-              </div>
-              <button type="button" className="rounded-[10px] cursor-pointer flex items-center justify-between px-[15px] bg-white" style={{ height: 50, border: selectedMethod === 'telegram' ? '1px solid #101010' : '1px solid rgba(16,16,16,0.25)' }} onClick={() => setSelectedMethod('telegram')}>
-                <span style={{ fontSize: 16, color: selectedMethod === 'telegram' ? '#101010' : 'rgba(16,16,16,0.5)' }}>Написать нам в «Telegram»</span>
-                {selectedMethod === 'telegram' ? <SelectedArrowIcon /> : <UnselectedArrowIcon />}
-              </button>
-              <button type="button" className="rounded-[10px] cursor-pointer flex items-center justify-between px-[15px] bg-white" style={{ height: 50, border: selectedMethod === 'phone' ? '1px solid #101010' : '1px solid rgba(16,16,16,0.25)' }} onClick={() => setSelectedMethod('phone')}>
-                <span style={{ fontSize: 16, color: '#101010' }}>Перезвонить на номер телефона</span>
-                {selectedMethod === 'phone' ? <SelectedArrowIcon /> : <UnselectedArrowIcon />}
-              </button>
+          <div className="flex flex-col gap-[5px]" style={{ marginBottom: 20 }}>
+            <div className="relative">
+              <input
+                type="text"
+                name="consultation-name"
+                autoComplete="name"
+                placeholder="Имя"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="box-border w-full rounded-[10px] bg-white pl-[15px] outline-none placeholder:text-[rgba(16,16,16,0.35)]"
+                style={{
+                  ...involve,
+                  height: 50,
+                  paddingRight: 44,
+                  fontSize: 16,
+                  lineHeight: '125%',
+                  color: '#101010',
+                  border: borderName,
+                }}
+              />
+              <span className="pointer-events-none absolute right-[15px] top-1/2 flex -translate-y-1/2 items-center">
+                {nameShowError ? <FieldErrorIcon /> : null}
+                {!nameShowError && nameShowSuccess ? <FieldSuccessIcon /> : null}
+              </span>
             </div>
-          ) : null}
 
-          {step === 'phone' ? (
-            <div className="rounded-[10px] w-full mb-[20px]" style={{ height: 50, border: isPhoneValid ? '1px solid #101010' : '1px solid rgba(16,16,16,0.25)' }}>
+            <div className="relative">
               <input
                 type="tel"
+                name="consultation-phone"
+                autoComplete="tel"
+                placeholder="Номер сотового телефона"
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(formatPhoneNumber(e.target.value) || '+7 ')}
-                className="w-full h-full px-[15px] bg-transparent outline-none rounded-[10px]"
-                style={{ fontSize: 16, lineHeight: '125%', color: '#101010' }}
+                className="box-border w-full rounded-[10px] bg-white pl-[15px] outline-none placeholder:text-[rgba(16,16,16,0.35)]"
+                style={{
+                  ...involve,
+                  height: 50,
+                  paddingRight: 44,
+                  fontSize: 16,
+                  lineHeight: '125%',
+                  color: '#101010',
+                  border: borderPhone,
+                }}
               />
+              <span className="pointer-events-none absolute right-[15px] top-1/2 flex -translate-y-1/2 items-center">
+                {phoneShowError ? <FieldErrorIcon /> : null}
+                {!phoneShowError && phoneShowSuccess ? <FieldSuccessIcon /> : null}
+              </span>
             </div>
-          ) : null}
-
-          <div className="flex items-center gap-[5px]">
-            <button
-              type="button"
-              className="rounded-[10px] flex items-center justify-center bg-white"
-              style={{ width: 50, height: 50, border: '1px solid rgba(16,16,16,0.15)' }}
-              onClick={handleBack}
-            >
-              <svg width="12" height="6" viewBox="0 0 12 6" fill="none" style={{ transform: 'rotate(-90deg)' }}><path d="M0.112544 5.34082L5.70367 0.114631C5.7823 0.0412287 5.88888 0 6 0C6.11112 0 6.2177 0.0412287 6.29633 0.114631L11.8875 5.34082C11.9615 5.41513 12.0019 5.5134 11.9999 5.61495C11.998 5.7165 11.954 5.81338 11.8772 5.8852C11.8004 5.95701 11.6967 5.99815 11.5881 5.99994C11.4794 6.00173 11.3743 5.96404 11.2948 5.8948L6 0.946249L0.705204 5.8948C0.625711 5.96404 0.520573 6.00173 0.411936 5.99994C0.3033 5.99815 0.199649 5.95701 0.12282 5.88519C0.04599 5.81338 0.00198176 5.71649 6.48835e-05 5.61495C-0.00185199 5.5134 0.0384722 5.41513 0.112544 5.34082Z" fill="#101010" /></svg>
-            </button>
-            <button
-              type="button"
-              className="flex-1 rounded-[10px] h-[50px] text-white"
-              style={{ background: (selectedMethod || isPhoneValid) ? '#101010' : 'rgba(16,16,16,0.25)' }}
-              onClick={() => {
-                if (selectedMethod === 'phone') setStep('phone');
-                else if (step === 'phone') {
-                  if (isPhoneValid) handleSubmit();
-                } else if (selectedMethod) handleSubmit();
-              }}
-              disabled={step === 'contact-method' ? !selectedMethod : !isPhoneValid}
-            >
-              {step === 'phone' ? 'Далее' : 'Далее'}
-            </button>
           </div>
+
+          <button
+            type="button"
+            onClick={handleSubmit}
+            className="box-border w-full rounded-[10px] border-none outline-none transition-[background,color] duration-150 focus:outline-none"
+            style={{
+              ...involve,
+              height: 50,
+              minHeight: 50,
+              fontSize: 16,
+              lineHeight: '315%',
+              cursor: 'pointer',
+              background: confirmButtonSolid ? '#101010' : '#FFFFFF',
+              color: confirmButtonSolid ? '#FFFFFF' : 'rgba(16, 16, 16, 0.5)',
+            }}
+          >
+            Подтверждение
+          </button>
         </div>
       </div>
     </div>

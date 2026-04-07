@@ -145,7 +145,7 @@ export default function HomeClient() {
     <div ref={mainRef}>
       {showAppLoading && <LoadingScreen progress={loadingProgress} />}
       <main
-        className="min-h-screen w-full"
+        className="min-h-[100dvh] w-full overflow-x-hidden"
         style={{
           visibility: showAppLoading ? 'hidden' : 'visible',
           position: showAppLoading ? 'absolute' : undefined,

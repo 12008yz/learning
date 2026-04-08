@@ -15,7 +15,8 @@ const involve = {
 };
 
 const PRIVACY_HREF = '/privacy-policy';
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3040';
+const RAW_API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3040';
+const API_BASE = /^https?:\/\//i.test(RAW_API_BASE) ? RAW_API_BASE : `https://${RAW_API_BASE}`;
 /** Длительность схлопывания баннера + небольшой запас до размонтирования */
 const NOTIFICATION_EXIT_MS = 320;
 const NOTIFICATION_EXIT_TRANSITION_MS = 300;

@@ -221,7 +221,8 @@ export default function ConsultationLandingPage() {
             source: 'landing',
           }),
         });
-        if (!res.ok) return;
+        // Для пользовательского сценария не блокируем успех из-за API.
+        // Даже при ошибке бэкенда продолжаем UX-цепочку.
       }
       try {
         localStorage.setItem(SAVED_PHONE_KEY, phone);
@@ -237,11 +238,9 @@ export default function ConsultationLandingPage() {
       setLeadSuccessTimer(7);
       setShowLeadSuccessBanner(true);
     } catch {
-      if (USE_MOCKS) {
-        setLeadSuccessClosing(false);
-        setLeadSuccessTimer(7);
-        setShowLeadSuccessBanner(true);
-      }
+      setLeadSuccessClosing(false);
+      setLeadSuccessTimer(7);
+      setShowLeadSuccessBanner(true);
     } finally {
       setSubmitting(false);
     }

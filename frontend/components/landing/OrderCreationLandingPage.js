@@ -514,7 +514,9 @@ export default function OrderCreationLandingPage() {
           boxSizing: 'border-box',
         }}
       >
-        {orderStep === 0 && <LandingHeaderBar onConsultationClick={() => setConsultationModalOpen(true)} />}
+        {(orderStep === 0 || orderStep === 5) && (
+          <LandingHeaderBar onConsultationClick={() => setConsultationModalOpen(true)} />
+        )}
 
         <ConsultationModal
           isOpen={consultationModalOpen}

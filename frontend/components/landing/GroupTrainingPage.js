@@ -420,14 +420,14 @@ export default function GroupTrainingPage() {
           >
             <LandingHeaderBar onConsultationClick={openConsultation} />
 
-            {/* Контейнер карусели — как Frame3: 165px под шапкой, снизу 20px + safe area */}
+            {/* Контейнер карусели: адаптивный верхний отступ, чтобы в in-app браузерах карточки не обрезались */}
             <div
               className="carousel-wrapper"
               style={{
                 position: 'absolute',
                 left: 0,
                 right: 0,
-                top: 'calc(var(--header-top, 50px) + 40px + 95px)',
+                top: 'calc(var(--header-top, 50px) + 40px + clamp(45px, 8vh, 95px))',
                 bottom: `calc(${CARD_TO_BOTTOM_GAP_PX}px + var(--sab, 0px))`,
                 zIndex: 1,
                 background: '#F5F5F5',

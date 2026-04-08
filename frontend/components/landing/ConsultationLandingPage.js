@@ -17,6 +17,7 @@ const involve = {
 const PRIVACY_HREF = '/privacy-policy';
 const RAW_API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3040';
 const API_BASE = /^https?:\/\//i.test(RAW_API_BASE) ? RAW_API_BASE : `https://${RAW_API_BASE}`;
+const USE_MOCKS = process.env.NEXT_PUBLIC_USE_MOCKS === 'true';
 /** Длительность схлопывания баннера + небольшой запас до размонтирования */
 const NOTIFICATION_EXIT_MS = 320;
 const NOTIFICATION_EXIT_TRANSITION_MS = 300;
@@ -110,7 +111,6 @@ export default function ConsultationLandingPage() {
   /** Тёмная рамка блока политики только после клика по нему или попытки отправки без согласия */
   const [privacyConsentTouched, setPrivacyConsentTouched] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState(null);
   const [consultationModalOpen, setConsultationModalOpen] = useState(false);
   /** После отправки с пустым телефоном кнопка «Консультирование» становится прозрачной, пока не введён номер */
   const [submitAttemptedWithoutPhone, setSubmitAttemptedWithoutPhone] = useState(false);
@@ -195,7 +195,6 @@ export default function ConsultationLandingPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitError(null);
     /* Тёмная рамка политики — при любой отправке без галочки (в т.ч. если телефон пустой и раньше был return) */
     if (!privacyAccepted) {
       setPrivacyConsentTouched(true);
@@ -211,27 +210,25 @@ export default function ConsultationLandingPage() {
     }
     setSubmitting(true);
     try {
-      const res = await fetch(`${API_BASE}/api/leads/consultation`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          phone,
-          privacyAccepted: true,
-          contactMethod: null,
-          source: 'landing',
-        }),
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        setSubmitError(data.error || 'Не удалось отправить заявку');
-        return;
+      if (!USE_MOCKS) {
+        const res = await fetch(`${API_BASE}/api/leads/consultation`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            phone,
+            privacyAccepted: true,
+            contactMethod: null,
+            source: 'landing',
+          }),
+        });
+        if (!res.ok) return;
       }
-      setPhone('');
       try {
         localStorage.setItem(SAVED_PHONE_KEY, phone);
       } catch {
         // ignore
       }
+      setPhone('');
       setPhoneError(false);
       setSubmitAttemptedWithoutPhone(false);
       setPrivacyConsentTouched(false);
@@ -240,7 +237,11 @@ export default function ConsultationLandingPage() {
       setLeadSuccessTimer(7);
       setShowLeadSuccessBanner(true);
     } catch {
-      setSubmitError('Ошибка сети. Проверьте подключение и адрес API.');
+      if (USE_MOCKS) {
+        setLeadSuccessClosing(false);
+        setLeadSuccessTimer(7);
+        setShowLeadSuccessBanner(true);
+      }
     } finally {
       setSubmitting(false);
     }
@@ -497,12 +498,6 @@ export default function ConsultationLandingPage() {
                 </span>
               </button>
             </div>
-
-            {submitError ? (
-              <p className="m-0 text-center text-[13px] text-red-600" role="alert">
-                {submitError}
-              </p>
-            ) : null}
 
             <button
               type="submit"

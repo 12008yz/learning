@@ -4,6 +4,21 @@ import { useEffect, useMemo, useState } from 'react';
 
 const RAW_API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3040';
 const API_BASE = /^https?:\/\//i.test(RAW_API_BASE) ? RAW_API_BASE : `https://${RAW_API_BASE}`;
+const USE_MOCKS = process.env.NEXT_PUBLIC_USE_MOCKS === 'true';
+const MOCK_LEADS = [
+  {
+    id: 1001,
+    createdAt: new Date().toISOString(),
+    phone: '79999999999',
+    name: 'Тестовый пользователь',
+    contactMethod: 'phone',
+    source: 'landing',
+    trainingType: 'group',
+    grade: 9,
+    subjectIds: ['math', 'russian'],
+    durationId: '3m',
+  },
+];
 
 function formatPhone(value) {
   const d = String(value || '').replace(/\D/g, '');
@@ -27,6 +42,10 @@ export default function OrdersPanelPage() {
     let mounted = true;
     (async () => {
       try {
+        if (USE_MOCKS) {
+          if (mounted) setItems(MOCK_LEADS);
+          return;
+        }
         const res = await fetch(`${API_BASE}/api/leads/consultation`, { cache: 'no-store' });
         const json = await res.json().catch(() => ({}));
         if (!res.ok || !json?.success) {
@@ -34,7 +53,10 @@ export default function OrdersPanelPage() {
         }
         if (mounted) setItems(Array.isArray(json.data) ? json.data : []);
       } catch (e) {
-        if (mounted) setError(e.message || 'Ошибка загрузки');
+        if (mounted) {
+          if (USE_MOCKS) setItems(MOCK_LEADS);
+          else setError(e.message || 'Ошибка загрузки');
+        }
       } finally {
         if (mounted) setLoading(false);
       }

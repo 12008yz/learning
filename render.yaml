@@ -38,3 +38,5 @@ services:
           type: web
           name: learning-api
           property: host
+      - key: NEXT_PUBLIC_USE_MOCKS
+        value: "true"

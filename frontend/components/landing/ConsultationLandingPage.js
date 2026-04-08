@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import ConsultationModal from '@/components/modals/ConsultationModal';
 import CookieBanner from '@/components/notifications/CookieBanner';
 import LandingHeaderBar from '@/components/landing/LandingHeaderBar';
@@ -98,6 +99,7 @@ function isPhoneEmpty(value) {
  * контейнер 400px, шапка absolute (20 / 340, --header-top), cookie 360×120, карточка left/right 15, top 230, padding 15, gap 5.
  */
 export default function ConsultationLandingPage() {
+  const router = useRouter();
   const [showCookieBanner, setShowCookieBanner] = useState(true);
   const [cookieTimer, setCookieTimer] = useState(7);
   const [phone, setPhone] = useState('');
@@ -171,6 +173,14 @@ export default function ConsultationLandingPage() {
     }, NOTIFICATION_EXIT_MS);
     return () => clearTimeout(id);
   }, [leadSuccessClosing]);
+
+  useEffect(() => {
+    if (!showLeadSuccessBanner) return;
+    const id = setTimeout(() => {
+      router.push('/group-training');
+    }, 1000);
+    return () => clearTimeout(id);
+  }, [showLeadSuccessBanner, router]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

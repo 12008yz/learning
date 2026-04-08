@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import ConsultationModal from '@/components/modals/ConsultationModal';
+import { useRouter } from 'next/navigation';
+import ConsultationFlow from '@/components/modals/ConsultationFlow';
 import LandingHeaderBar from '@/components/landing/LandingHeaderBar';
 import { OutlineCheckCircle16, OutlineCrossCircle16 } from '@/components/landing/OutlineListIcons';
 
@@ -381,10 +382,11 @@ function EducationTariffCard({
 }
 
 export default function GroupTrainingPage() {
-  const [consultationModalOpen, setConsultationModalOpen] = useState(false);
+  const router = useRouter();
+  const [consultationFlowOpen, setConsultationFlowOpen] = useState(false);
   const [detailsTariff, setDetailsTariff] = useState(null);
 
-  const openConsultation = () => setConsultationModalOpen(true);
+  const openConsultation = () => setConsultationFlowOpen(true);
   const openTariffDetails = (tariff) => setDetailsTariff(tariff);
   const closeTariffDetails = () => setDetailsTariff(null);
 
@@ -470,11 +472,23 @@ export default function GroupTrainingPage() {
         </div>
       )}
 
-      <ConsultationModal
-        isOpen={consultationModalOpen}
-        onClose={() => setConsultationModalOpen(false)}
-        onComplete={() => setConsultationModalOpen(false)}
-      />
+      {consultationFlowOpen ? (
+        <ConsultationFlow
+          onClose={() => {
+            setConsultationFlowOpen(false);
+            router.push('/order');
+          }}
+          onSkip={() => {
+            setConsultationFlowOpen(false);
+            router.push('/order');
+          }}
+          onSubmit={() => {
+            setConsultationFlowOpen(false);
+            router.push('/order');
+          }}
+          initialStep="contact-method"
+        />
+      ) : null}
     </>
   );
 }

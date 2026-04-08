@@ -262,7 +262,8 @@ export default function ConsultationLandingPage() {
           width: 400,
           minWidth: 400,
           maxWidth: 400,
-          minHeight: 230 + 355 + 20,
+          height: '100%',
+          minHeight: '100%',
           boxSizing: 'border-box',
         }}
       >
@@ -327,7 +328,9 @@ export default function ConsultationLandingPage() {
           className="absolute box-border bg-white"
           style={{
             left: 20,
-            top: 230,
+            // Родитель уже имеет нижний padding, поэтому ставим -8px,
+            // чтобы итоговый отступ карточки от низа экрана был как в модалках (~20px).
+            bottom: -8,
             width: 360,
             height: 355,
             borderRadius: 20,

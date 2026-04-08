@@ -117,8 +117,8 @@ function TariffDetailsOverlay({ tariff, onCollapse, onConsultation }) {
   }, [tariff]);
 
   return (
-    <div className="box-border h-[100dvh] w-full bg-[#F5F5F5] text-[#101010]">
-      <div className="box-border mx-auto flex h-full w-full max-w-[425px] flex-col pt-[75px]">
+    <div className="box-border min-h-[100dvh] w-full bg-[#F5F5F5] text-[#101010]">
+      <div className="box-border mx-auto w-full max-w-[425px] pb-[40px] pt-[75px]">
         <div className="px-5">
           <button
             type="button"
@@ -137,7 +137,7 @@ function TariffDetailsOverlay({ tariff, onCollapse, onConsultation }) {
         </div>
         <div
           ref={scrollRef}
-          className="carousel-container scrollbar-hide flex min-h-0 flex-1 flex-nowrap items-start overflow-x-auto overflow-y-auto"
+          className="carousel-container scrollbar-hide flex flex-nowrap items-start overflow-x-auto overflow-y-hidden"
           style={{
             gap: 5,
             scrollSnapType: 'x mandatory',
@@ -174,7 +174,7 @@ function TariffDetailsOverlay({ tariff, onCollapse, onConsultation }) {
           <div className="carousel-spacer-right" aria-hidden style={{ alignSelf: 'stretch' }} />
         </div>
 
-        <div className="box-border mt-auto w-full rounded-t-[20px] bg-white" style={{ minHeight: 170 }}>
+        <div className="box-border mt-[60px] w-full rounded-t-[20px] bg-white" style={{ minHeight: 170 }}>
           <div className="box-border w-full px-[35px] pb-[15px] pt-5">
             <p className="m-0 mb-1 text-[20px] leading-[125%] text-[#101010]" style={involve}>
               {tariffMeta[activeIndex].price}

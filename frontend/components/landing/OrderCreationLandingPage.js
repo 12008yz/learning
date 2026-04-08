@@ -406,7 +406,7 @@ export default function OrderCreationLandingPage() {
       className="absolute box-border bg-white"
       style={{
         left: 20,
-        top: 230,
+        bottom: -8,
         width: 360,
         borderRadius: 20,
         display: 'flex',
@@ -509,7 +509,8 @@ export default function OrderCreationLandingPage() {
           width: 400,
           minWidth: 400,
           maxWidth: 400,
-          minHeight: orderStep >= 1 ? '100dvh' : 230 + 355 + 20,
+          height: '100%',
+          minHeight: '100%',
           boxSizing: 'border-box',
         }}
       >

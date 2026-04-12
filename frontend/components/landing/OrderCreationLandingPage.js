@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useLayoutEffect } from 'react';
+import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import LandingHeaderBar from '@/components/landing/LandingHeaderBar';
@@ -226,6 +227,8 @@ export default function OrderCreationLandingPage({
   layout = 'viewport',
   exposeOpenConsultation,
   onAfterPhoneLead,
+  /** Только stacked: шаги 1–4 мастера — родитель скрывает глобальную шапку и показывает слот под портал */
+  onStackedWizardStepsActive,
 } = {}) {
   const router = useRouter();
   const isStacked = layout === 'stacked';
@@ -303,6 +306,16 @@ export default function OrderCreationLandingPage({
     exposeOpenConsultation(() => setConsultationFlowOpen(true));
     return () => exposeOpenConsultation(null);
   }, [isStacked, exposeOpenConsultation]);
+
+  useLayoutEffect(() => {
+    if (typeof onStackedWizardStepsActive !== 'function') return;
+    onStackedWizardStepsActive(isStacked && orderStep >= 1 && orderStep <= 4);
+  }, [isStacked, orderStep, onStackedWizardStepsActive]);
+
+  useEffect(() => {
+    if (typeof onStackedWizardStepsActive !== 'function') return undefined;
+    return () => onStackedWizardStepsActive(false);
+  }, [onStackedWizardStepsActive]);
 
   const goToTariffStep = () => {
     if (!privacyAccepted) {
@@ -413,6 +426,36 @@ export default function OrderCreationLandingPage({
       setLeadSubmitting(false);
     }
   };
+
+  const wizardCollapseButton = (
+    <button
+      type="button"
+      onClick={collapseWizardToLanding}
+      className="box-border flex h-10 max-w-[175px] items-center gap-2 rounded-[20px] border border-white/50 bg-white pl-2 pr-3 backdrop-blur-[5px] transition-opacity hover:opacity-90 outline-none focus:outline-none"
+      aria-label="Свернуть окно"
+    >
+      <CollapseIcon />
+      <span className="text-[12px] leading-[40px] text-[rgba(16,16,16,0.5)]" style={{ ...involve, fontSize: 12 }}>
+        сворачивание окна
+      </span>
+    </button>
+  );
+
+  const stackedWizardCollapsePortal =
+    isStacked &&
+    orderStep >= 1 &&
+    orderStep <= 4 &&
+    typeof document !== 'undefined' &&
+    (() => {
+      const slot = document.getElementById('stacked-order-wizard-header-slot');
+      if (!slot) return null;
+      return createPortal(
+        <div className="absolute z-10" style={{ left: 'var(--main-block-margin)', top: 'var(--header-top, 50px)' }}>
+          {wizardCollapseButton}
+        </div>,
+        slot
+      );
+    })();
 
   const renderFinalCard = (buttonHandler) => (
     <div
@@ -558,24 +601,16 @@ export default function OrderCreationLandingPage({
         {(orderStep === 1 || orderStep === 2 || orderStep === 3 || orderStep === 4) && (
           <div className="flex min-h-0 flex-1 flex-col overflow-hidden" style={{ boxSizing: 'border-box' }}>
             <div className="relative flex min-h-0 w-full min-w-0 flex-1 flex-col overflow-hidden bg-[#F5F5F5]">
-              <div className="relative flex-shrink-0 cursor-pointer" style={{ minHeight: '105px' }}>
-                <div
-                  className="absolute left-0 right-0"
-                  style={{ top: HINT_TOP, left: 'var(--main-block-margin)', right: 'var(--main-block-margin)' }}
-                >
-                  <button
-                    type="button"
-                    onClick={collapseWizardToLanding}
-                    className="box-border flex h-10 max-w-[175px] items-center gap-2 rounded-[20px] border border-white/50 bg-white pl-2 pr-3 backdrop-blur-[5px] transition-opacity hover:opacity-90 outline-none focus:outline-none"
-                    aria-label="Свернуть окно"
+              {!isStacked ? (
+                <div className="relative flex-shrink-0 cursor-pointer" style={{ minHeight: '105px' }}>
+                  <div
+                    className="absolute left-0 right-0"
+                    style={{ top: HINT_TOP, left: 'var(--main-block-margin)', right: 'var(--main-block-margin)' }}
                   >
-                    <CollapseIcon />
-                    <span className="text-[12px] leading-[40px] text-[rgba(16,16,16,0.5)]" style={{ ...involve, fontSize: 12 }}>
-                      сворачивание окна
-                    </span>
-                  </button>
+                    {wizardCollapseButton}
+                  </div>
                 </div>
-              </div>
+              ) : null}
 
               <div
                 className="scrollbar-hide mt-auto flex w-full min-w-0 flex-shrink-0 flex-col rounded-[20px] bg-white"
@@ -588,7 +623,7 @@ export default function OrderCreationLandingPage({
                   marginBottom: 0,
                   ...(isStacked
                     ? {
-                        maxHeight: 'calc(var(--unified-section-min-h) - 120px)',
+                        maxHeight: 'calc(var(--unified-section-min-h) - 24px)',
                         overflowY: 'auto',
                         WebkitOverflowScrolling: 'touch',
                       }
@@ -786,6 +821,8 @@ export default function OrderCreationLandingPage({
         )}
       </div>
     </div>
+
+      {stackedWizardCollapsePortal}
 
       {consultationFlowOpen ? (
         <ConsultationFlow

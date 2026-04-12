@@ -168,6 +168,10 @@ export default function HomePage({ privacyPolicyOpen, onOpenPrivacyPolicy, onPri
     openersRef.current.order = fn;
   }, []);
 
+  /** Мастер заявки (шаги 1–4) на главной: вместо шапки — только «сворачивание окна» */
+  const [orderStackedWizardSteps, setOrderStackedWizardSteps] = useState(false);
+  const hideAppHeaderForOrderWizard = orderStackedWizardSteps && activeSection === 'order';
+
   const sectionHeightStyle = { height: 'var(--unified-section-min-h)' };
 
   return (
@@ -181,7 +185,19 @@ export default function HomePage({ privacyPolicyOpen, onOpenPrivacyPolicy, onPri
             className="relative mx-auto w-full max-w-[425px]"
             style={{ height: 'calc(var(--header-top) + var(--header-height) + 8px)' }}
           >
-            <LandingHeaderBar onConsultationClick={handleHeaderConsultation} menuHref="#section-hero" />
+            <div
+              id="stacked-order-wizard-header-slot"
+              className={
+                hideAppHeaderForOrderWizard
+                  ? 'absolute inset-0 z-[15] pointer-events-auto'
+                  : 'pointer-events-none invisible absolute inset-0 z-[15]'
+              }
+            />
+            {!hideAppHeaderForOrderWizard ? (
+              <div className="relative z-20">
+                <LandingHeaderBar onConsultationClick={handleHeaderConsultation} menuHref="#section-hero" />
+              </div>
+            ) : null}
           </div>
         </header>
 
@@ -223,6 +239,7 @@ export default function HomePage({ privacyPolicyOpen, onOpenPrivacyPolicy, onPri
               layout="stacked"
               exposeOpenConsultation={exposeOrder}
               onAfterPhoneLead={scrollNavigate.toHero}
+              onStackedWizardStepsActive={setOrderStackedWizardSteps}
             />
           </section>
 

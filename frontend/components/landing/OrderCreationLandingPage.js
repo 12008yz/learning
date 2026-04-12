@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import LandingHeaderBar from '@/components/landing/LandingHeaderBar';
-import ConsultationModal from '@/components/modals/ConsultationModal';
+import ConsultationFlow from '@/components/modals/ConsultationFlow';
 import { HINT_TOP } from '@/components/common/ClickOutsideHint';
 
 const involve = {
@@ -40,7 +41,7 @@ const wizardSubtitleStyle = {
   marginBottom: 20,
 };
 
-/** Как в ConsultationModal / GroupTrainingPage / PrivacyPolicyPage */
+/** Как в ConsultationFlow / GroupTrainingPage / PrivacyPolicyPage */
 function CollapseIcon() {
   return (
     <span className="flex h-5 w-5 shrink-0 items-center justify-center" aria-hidden>
@@ -222,6 +223,7 @@ const SUBJECT_OPTIONS = [
 ];
 
 export default function OrderCreationLandingPage() {
+  const router = useRouter();
   /** 0 — лендинг; 1 — тип; 2 — класс; 3 — предметы; 4 — срок тарифа; 5 — финальный экран */
   const [orderStep, setOrderStep] = useState(0);
   /** 'group' | 'personal' | null — без выбора по умолчанию */
@@ -243,7 +245,7 @@ export default function OrderCreationLandingPage() {
   const [privacyConsentTouched, setPrivacyConsentTouched] = useState(false);
   /** До первой неуспешной попытки кнопка тёмная; после клика без согласия — белая до валидного состояния */
   const [submitAttemptedWithoutPrivacy, setSubmitAttemptedWithoutPrivacy] = useState(false);
-  const [consultationModalOpen, setConsultationModalOpen] = useState(false);
+  const [consultationFlowOpen, setConsultationFlowOpen] = useState(false);
   const [leadSubmitting, setLeadSubmitting] = useState(false);
 
   useEffect(() => {
@@ -370,7 +372,7 @@ export default function OrderCreationLandingPage() {
     setOrderStep(5);
   };
 
-  const submitOrderLead = async ({ name, phone }) => {
+  const submitOrderLead = async ({ name, phone, contactMethod = 'phone' }) => {
     if (leadSubmitting) return;
     setLeadSubmitting(true);
     try {
@@ -381,7 +383,7 @@ export default function OrderCreationLandingPage() {
           phone,
           name: name || null,
           privacyAccepted: true,
-          contactMethod: 'phone',
+          contactMethod,
           source: 'order',
           trainingType: prepType,
           grade,
@@ -405,9 +407,9 @@ export default function OrderCreationLandingPage() {
     <div
       className="absolute box-border bg-white"
       style={{
-        left: 20,
-        bottom: -8,
-        width: 360,
+        left: 'var(--main-block-margin)',
+        right: 'var(--main-block-margin)',
+        bottom: 0,
         borderRadius: 20,
         display: 'flex',
         flexDirection: 'column',
@@ -426,7 +428,10 @@ export default function OrderCreationLandingPage() {
         сдали на топ баллов
       </h1>
 
-      <div className="box-border flex shrink-0 items-center gap-[5px] self-start rounded-[100px] bg-[#F5F5F5] px-[5px]" style={{ width: 330, height: 25 }}>
+      <div
+        className="box-border flex min-w-0 shrink-0 items-center gap-[5px] self-start rounded-[100px] bg-[#F5F5F5] px-[5px]"
+        style={{ width: 'calc(100% - 10px)', maxWidth: '100%', height: 25 }}
+      >
         <span className="flex h-[15px] w-[15px] shrink-0 items-center justify-center" aria-hidden>
           <BadgeCheckIcon />
         </span>
@@ -435,13 +440,11 @@ export default function OrderCreationLandingPage() {
         </span>
       </div>
 
-      <div className="shrink-0" style={{ width: 330, maxWidth: '100%', marginTop: 5 }}>
+      <div className="w-full min-w-0 shrink-0" style={{ marginTop: 5 }}>
         <button
           type="button"
-          className="relative box-border flex cursor-pointer items-center rounded-[10px] border border-solid bg-white text-left outline-none focus:outline-none"
+          className="relative box-border flex w-full min-w-0 cursor-pointer items-center rounded-[10px] border border-solid bg-white text-left outline-none focus:outline-none"
           style={{
-            width: 330,
-            maxWidth: '100%',
             height: 50,
             minHeight: 50,
             paddingLeft: 10,
@@ -479,9 +482,10 @@ export default function OrderCreationLandingPage() {
 
       <button
         type="button"
-        className="box-border mt-[15px] flex w-[330px] max-w-full shrink-0 cursor-pointer items-center justify-center rounded-[10px] outline-none transition-[background,color] duration-150 focus:outline-none"
+        className="box-border mt-[15px] flex w-full min-w-0 shrink-0 cursor-pointer items-center justify-center rounded-[10px] outline-none transition-[background,color] duration-150 focus:outline-none"
         style={{
           ...involve,
+          width: '100%',
           height: 50,
           minHeight: 50,
           background: submitButtonSolid ? '#101010' : '#FFFFFF',
@@ -499,48 +503,35 @@ export default function OrderCreationLandingPage() {
   );
 
   return (
-    <div
-      className="fixed inset-0 z-[9999] flex flex-col items-center overflow-hidden bg-[#F5F5F5]"
-      style={{ height: '100dvh', boxSizing: 'border-box', paddingTop: 'var(--sat, 0px)', paddingBottom: 'calc(28px + env(safe-area-inset-bottom, 0px))' }}
-    >
+    <>
       <div
-        className="relative shrink-0 bg-[#F5F5F5]"
+        className="fixed inset-0 z-[9999] flex w-full min-w-0 flex-col items-stretch overflow-hidden bg-[#F5F5F5]"
         style={{
-          width: 400,
-          minWidth: 400,
-          maxWidth: 400,
-          height: '100%',
-          minHeight: '100%',
+          height: '100dvh',
           boxSizing: 'border-box',
+          paddingTop: 'var(--sat, 0px)',
+          paddingBottom: 'calc(var(--main-block-margin) + env(safe-area-inset-bottom, 0px))',
         }}
       >
-        {(orderStep === 0 || orderStep === 5) && (
-          <LandingHeaderBar onConsultationClick={() => setConsultationModalOpen(true)} />
-        )}
+        <div
+          className="relative box-border flex h-full min-h-0 w-full min-w-0 flex-col bg-[#F5F5F5]"
+          style={{ boxSizing: 'border-box' }}
+        >
+          {(orderStep === 0 || orderStep === 5) && (
+            <LandingHeaderBar onConsultationClick={() => setConsultationFlowOpen(true)} />
+          )}
 
-        <ConsultationModal
-          isOpen={consultationModalOpen}
-          onClose={() => setConsultationModalOpen(false)}
-          onComplete={async (payload) => {
-            await submitOrderLead(payload);
-            setConsultationModalOpen(false);
-          }}
-        />
-
-        {orderStep === 0 && renderFinalCard(goToTariffStep)}
-        {orderStep === 5 && renderFinalCard(() => setConsultationModalOpen(true))}
+          {orderStep === 0 && renderFinalCard(goToTariffStep)}
+        {orderStep === 5 && renderFinalCard(() => setConsultationFlowOpen(true))}
 
         {(orderStep === 1 || orderStep === 2 || orderStep === 3 || orderStep === 4) && (
-          <div
-            className="flex h-[100dvh] min-h-0 flex-col overflow-hidden"
-            style={{
-              boxSizing: 'border-box',
-              paddingBottom: 'calc(15px + env(safe-area-inset-bottom, 0px))',
-            }}
-          >
-            <div className="relative w-full max-w-[400px] flex flex-1 min-h-0 flex-col overflow-hidden bg-[#F5F5F5]">
+          <div className="flex min-h-0 flex-1 flex-col overflow-hidden" style={{ boxSizing: 'border-box' }}>
+            <div className="relative flex min-h-0 w-full min-w-0 flex-1 flex-col overflow-hidden bg-[#F5F5F5]">
               <div className="relative flex-shrink-0 cursor-pointer" style={{ minHeight: '105px' }}>
-                <div className="absolute left-0 right-0" style={{ top: HINT_TOP, left: 20, right: 20 }}>
+                <div
+                  className="absolute left-0 right-0"
+                  style={{ top: HINT_TOP, left: 'var(--main-block-margin)', right: 'var(--main-block-margin)' }}
+                >
                   <button
                     type="button"
                     onClick={collapseWizardToLanding}
@@ -556,8 +547,12 @@ export default function OrderCreationLandingPage() {
               </div>
 
               <div
-                className="mx-auto mt-auto flex w-[360px] max-w-[90%] flex-shrink-0 flex-col rounded-[20px] bg-white"
+                className="mt-auto flex w-full min-w-0 flex-shrink-0 flex-col rounded-[20px] bg-white"
                 style={{
+                  marginLeft: 'var(--main-block-margin)',
+                  marginRight: 'var(--main-block-margin)',
+                  width: 'calc(100% - 2 * var(--main-block-margin))',
+                  boxSizing: 'border-box',
                   padding: 15,
                   marginBottom: 0,
                 }}
@@ -753,5 +748,23 @@ export default function OrderCreationLandingPage() {
         )}
       </div>
     </div>
+
+      {consultationFlowOpen ? (
+        <ConsultationFlow
+          onClose={() => setConsultationFlowOpen(false)}
+          onSkip={() => setConsultationFlowOpen(false)}
+          onSubmit={async (payload) => {
+            const method =
+              payload?.method === 'telegram' ? 'telegram' : payload?.method === 'phone' ? 'phone' : 'phone';
+            await submitOrderLead({ name: null, phone: payload?.phone, contactMethod: method });
+            setConsultationFlowOpen(false);
+            if (method === 'phone') {
+              router.push('/');
+            }
+          }}
+          initialStep="contact-method"
+        />
+      ) : null}
+    </>
   );
 }

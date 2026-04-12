@@ -55,7 +55,7 @@ function PaperPlaneIcon() {
 export default function LandingHeaderBar({ onConsultationClick, menuHref = '/' }) {
   return (
     <>
-      <div className="absolute z-10 h-10 w-10 cursor-pointer" style={{ left: 20, top: 'var(--header-top, 50px)' }}>
+      <div className="absolute z-10 h-10 w-10 cursor-pointer" style={{ left: 'var(--main-block-margin)', top: 'var(--header-top, 50px)' }}>
         <Link
           href={menuHref}
           className="flex h-10 w-10 items-center justify-center rounded-full border border-white/50 bg-white backdrop-blur-[5px]"
@@ -68,7 +68,7 @@ export default function LandingHeaderBar({ onConsultationClick, menuHref = '/' }
       <div
         className="absolute z-10 flex items-center"
         style={{
-          left: 70,
+          left: 'calc(var(--main-block-margin) + 40px + 10px)',
           top: 'calc(var(--header-top, 10px) + 15px)',
           width: 140,
           height: 10,
@@ -77,7 +77,10 @@ export default function LandingHeaderBar({ onConsultationClick, menuHref = '/' }
         <HeaderLogoSvg />
       </div>
 
-      <div className="absolute z-10 h-10 w-10 cursor-pointer" style={{ left: 340, top: 'var(--header-top, 50px)' }}>
+      <div
+        className="absolute z-10 h-10 w-10 cursor-pointer"
+        style={{ right: 'var(--main-block-margin)', top: 'var(--header-top, 50px)' }}
+      >
         <button
           type="button"
           className="flex h-10 w-10 items-center justify-center rounded-full border border-white/50 bg-white backdrop-blur-[5px] transition-opacity hover:opacity-90"

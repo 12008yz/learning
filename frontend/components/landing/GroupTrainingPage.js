@@ -13,8 +13,7 @@ const involve = {
   fontSynthesis: 'none',
 };
 
-/** Как во next/frontend Frame3/index.tsx — карточки от низа на 20px + safe area */
-const CARD_TO_BOTTOM_GAP_PX = 20;
+/** Карусель тарифов: снизу var(--main-block-margin) + safe area */
 const CARD_HEIGHT_PX = 550;
 
 const GROUP_FEATURES = [
@@ -117,9 +116,17 @@ function TariffDetailsOverlay({ tariff, onCollapse, onConsultation }) {
   }, [tariff]);
 
   return (
-    <div className="box-border min-h-[100dvh] w-full bg-[#F5F5F5] text-[#101010]">
-      <div className="box-border mx-auto w-full max-w-[425px] pb-[40px] pt-[75px]">
-        <div className="px-5">
+    <div
+      className="fixed inset-0 z-[10000] box-border flex w-full flex-col overflow-hidden bg-[#F5F5F5] text-[#101010]"
+      style={{
+        height: '100dvh',
+        maxHeight: '100dvh',
+        paddingTop: 'var(--sat, 0px)',
+        boxSizing: 'border-box',
+      }}
+    >
+      <div className="mx-auto flex h-full min-h-0 w-full max-w-[425px] flex-col">
+        <div className="box-border shrink-0 px-[var(--main-block-margin)] pb-2 pt-[75px]">
           <button
             type="button"
             onClick={onCollapse}
@@ -135,47 +142,51 @@ function TariffDetailsOverlay({ tariff, onCollapse, onConsultation }) {
           </button>
           <div className="h-[10px]" aria-hidden />
         </div>
-        <div
-          ref={scrollRef}
-          className="carousel-container scrollbar-hide flex flex-nowrap items-start overflow-x-auto overflow-y-hidden"
-          style={{
-            gap: 5,
-            scrollSnapType: 'x mandatory',
-            WebkitOverflowScrolling: 'touch',
-            scrollbarWidth: 'none',
-            msOverflowStyle: 'none',
-          }}
-          onScroll={() => {
-            const el = scrollRef.current;
-            if (!el) return;
-            const cards = Array.from(el.querySelectorAll('.carousel-card'));
-            if (!cards.length) return;
-            let closest = 0;
-            let best = Number.POSITIVE_INFINITY;
-            cards.forEach((card, idx) => {
-              const delta = Math.abs(card.offsetLeft - el.scrollLeft);
-              if (delta < best) {
-                best = delta;
-                closest = idx;
-              }
-            });
-            if (closest !== activeIndex) setActiveIndex(closest);
-          }}
-        >
-          <div className="carousel-spacer-left" aria-hidden style={{ alignSelf: 'stretch' }} />
-          <LongTariffCard
-            title="Групповая подготовка"
-            features={GROUP_FEATURES}
-          />
-          <LongTariffCard
-            title="Персональная подготовка"
-            features={PERSONAL_FEATURES}
-          />
-          <div className="carousel-spacer-right" aria-hidden style={{ alignSelf: 'stretch' }} />
+
+        <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
+          <div
+            ref={scrollRef}
+            className="carousel-container scrollbar-hide flex min-h-min flex-nowrap items-start overflow-x-auto overflow-y-hidden"
+            style={{
+              gap: 5,
+              scrollSnapType: 'x mandatory',
+              WebkitOverflowScrolling: 'touch',
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none',
+            }}
+            onScroll={() => {
+              const el = scrollRef.current;
+              if (!el) return;
+              const cards = Array.from(el.querySelectorAll('.carousel-card'));
+              if (!cards.length) return;
+              let closest = 0;
+              let best = Number.POSITIVE_INFINITY;
+              cards.forEach((card, idx) => {
+                const delta = Math.abs(card.offsetLeft - el.scrollLeft);
+                if (delta < best) {
+                  best = delta;
+                  closest = idx;
+                }
+              });
+              if (closest !== activeIndex) setActiveIndex(closest);
+            }}
+          >
+            <div className="carousel-spacer-left" aria-hidden style={{ alignSelf: 'stretch' }} />
+            <LongTariffCard title="Групповая подготовка" features={GROUP_FEATURES} />
+            <LongTariffCard title="Персональная подготовка" features={PERSONAL_FEATURES} />
+            <div className="carousel-spacer-right" aria-hidden style={{ alignSelf: 'stretch' }} />
+          </div>
         </div>
 
-        <div className="box-border mt-[60px] w-full rounded-t-[20px] bg-white" style={{ minHeight: 170 }}>
-          <div className="box-border w-full px-[35px] pb-[15px] pt-5">
+        <div className="box-border w-full shrink-0 rounded-t-[20px] bg-white shadow-[0_-6px_24px_rgba(16,16,16,0.06)]">
+          <div
+            className="box-border w-full pt-5"
+            style={{
+              paddingLeft: 'calc(var(--main-block-margin) + 15px)',
+              paddingRight: 'calc(var(--main-block-margin) + 15px)',
+              paddingBottom: 'calc(15px + env(safe-area-inset-bottom, 0px))',
+            }}
+          >
             <p className="m-0 mb-1 text-[20px] leading-[125%] text-[#101010]" style={involve}>
               {tariffMeta[activeIndex].price}
             </p>
@@ -386,7 +397,10 @@ export default function GroupTrainingPage() {
   const [consultationFlowOpen, setConsultationFlowOpen] = useState(false);
   const [detailsTariff, setDetailsTariff] = useState(null);
 
-  const openConsultation = () => setConsultationFlowOpen(true);
+  const openConsultation = () => {
+    setDetailsTariff(null);
+    setConsultationFlowOpen(true);
+  };
   const openTariffDetails = (tariff) => setDetailsTariff(tariff);
   const closeTariffDetails = () => setDetailsTariff(null);
 
@@ -400,16 +414,16 @@ export default function GroupTrainingPage() {
         />
       ) : (
         <div
-          className="fixed inset-0 z-[9999] flex flex-col items-center overflow-hidden bg-[#F5F5F5]"
+          className="fixed inset-0 z-[9999] flex w-full min-w-0 flex-col items-stretch overflow-hidden bg-[#F5F5F5]"
           style={{
             height: '100dvh',
             boxSizing: 'border-box',
             paddingTop: 'var(--sat, 0px)',
-            paddingBottom: 'calc(28px + env(safe-area-inset-bottom, 0px))',
+            paddingBottom: 'calc(var(--main-block-margin) + env(safe-area-inset-bottom, 0px))',
           }}
         >
           <div
-            className="relative shrink-0 overflow-hidden bg-[#F5F5F5]"
+            className="relative min-h-0 min-w-0 shrink-0 overflow-hidden bg-[#F5F5F5]"
             style={{
               width: '100%',
               maxWidth: '425px',
@@ -428,7 +442,7 @@ export default function GroupTrainingPage() {
                 left: 0,
                 right: 0,
                 top: 'calc(var(--header-top, 50px) + 40px + clamp(45px, 8vh, 95px))',
-                bottom: `calc(${CARD_TO_BOTTOM_GAP_PX}px + var(--sab, 0px))`,
+                bottom: 'calc(var(--main-block-margin) + env(safe-area-inset-bottom, 0px))',
                 zIndex: 1,
                 background: '#F5F5F5',
               }}
@@ -482,9 +496,13 @@ export default function GroupTrainingPage() {
             setConsultationFlowOpen(false);
             router.push('/order');
           }}
-          onSubmit={() => {
+          onSubmit={(payload) => {
             setConsultationFlowOpen(false);
-            router.push('/order');
+            if (payload?.method === 'phone') {
+              router.push('/');
+            } else {
+              router.push('/order');
+            }
           }}
           initialStep="contact-method"
         />

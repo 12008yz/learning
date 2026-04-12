@@ -4,12 +4,20 @@ import ConsultationLandingPage from '@/components/landing/ConsultationLandingPag
 import PrivacyPolicyPage from '@/components/privacy/PrivacyPolicyPage';
 
 /**
- * Главная страница приложения: сначала политика, после сворачивания — лендинг.
- * По структуре аналогично тому, как в next/frontend подключают Frame1 к page.
+ * Главная: лендинг; полный текст политики — по клику на «политики приватности» в баннере про куки (7 с).
  */
-export default function HomePage({ privacyCollapsed, onPrivacyCollapse }) {
-  if (privacyCollapsed) {
-    return <ConsultationLandingPage />;
-  }
-  return <PrivacyPolicyPage onCollapse={onPrivacyCollapse} />;
+export default function HomePage({ privacyPolicyOpen, onOpenPrivacyPolicy, onPrivacyCollapse }) {
+  return (
+    <>
+      <ConsultationLandingPage onOpenFullPrivacyPolicy={onOpenPrivacyPolicy} />
+      {privacyPolicyOpen ? (
+        <div
+          className="fixed inset-0 z-[10000] w-full min-w-0 overflow-y-auto overflow-x-hidden"
+          style={{ paddingTop: 'var(--sat, 0px)' }}
+        >
+          <PrivacyPolicyPage onCollapse={onPrivacyCollapse} />
+        </div>
+      ) : null}
+    </>
+  );
 }

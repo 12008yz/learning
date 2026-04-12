@@ -7,8 +7,8 @@ import HomePage from '@/components/pages/HomePage';
 
 export default function HomeClient() {
   const searchParams = useSearchParams();
-  /** Сначала политика; после «сворачивание окна» — лендинг */
-  const [privacyCollapsed, setPrivacyCollapsed] = useState(false);
+  /** Полный текст политики — оверлей по клику на уведомление на лендинге */
+  const [privacyPolicyOpen, setPrivacyPolicyOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [loadingProgress, setLoadingProgress] = useState(0);
   const isCompleteRef = useRef(false);
@@ -152,8 +152,9 @@ export default function HomeClient() {
         }}
       >
         <HomePage
-          privacyCollapsed={privacyCollapsed}
-          onPrivacyCollapse={() => setPrivacyCollapsed(true)}
+          privacyPolicyOpen={privacyPolicyOpen}
+          onOpenPrivacyPolicy={() => setPrivacyPolicyOpen(true)}
+          onPrivacyCollapse={() => setPrivacyPolicyOpen(false)}
         />
       </main>
     </div>

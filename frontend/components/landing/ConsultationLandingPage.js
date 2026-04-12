@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import ConsultationModal from '@/components/modals/ConsultationModal';
+import ConsultationFlow from '@/components/modals/ConsultationFlow';
 import CookieBanner from '@/components/notifications/CookieBanner';
 import LandingHeaderBar from '@/components/landing/LandingHeaderBar';
 
@@ -101,7 +101,7 @@ function isPhoneEmpty(value) {
  * Лендинг по структуре next/frontend Frame1/index.tsx:
  * контейнер 400px, шапка absolute (20 / 340, --header-top), cookie 360×120, карточка left/right 15, top 230, padding 15, gap 5.
  */
-export default function ConsultationLandingPage() {
+export default function ConsultationLandingPage({ onOpenFullPrivacyPolicy } = {}) {
   const router = useRouter();
   const [showCookieBanner, setShowCookieBanner] = useState(true);
   const [cookieTimer, setCookieTimer] = useState(7);
@@ -111,7 +111,7 @@ export default function ConsultationLandingPage() {
   /** Тёмная рамка блока политики только после клика по нему или попытки отправки без согласия */
   const [privacyConsentTouched, setPrivacyConsentTouched] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [consultationModalOpen, setConsultationModalOpen] = useState(false);
+  const [consultationFlowOpen, setConsultationFlowOpen] = useState(false);
   /** После отправки с пустым телефоном кнопка «Консультирование» становится прозрачной, пока не введён номер */
   const [submitAttemptedWithoutPhone, setSubmitAttemptedWithoutPhone] = useState(false);
   const [showLeadSuccessBanner, setShowLeadSuccessBanner] = useState(false);
@@ -247,42 +247,30 @@ export default function ConsultationLandingPage() {
   };
 
   return (
-    <div
-      className="fixed inset-0 z-[9999] flex flex-col items-center overflow-hidden bg-[#F5F5F5]"
-      style={{
-        height: '100dvh',
-        boxSizing: 'border-box',
-        paddingTop: 'var(--sat, 0px)',
-        paddingBottom: 'calc(28px + env(safe-area-inset-bottom, 0px))',
-      }}
-    >
+    <>
       <div
-        className="relative shrink-0 bg-[#F5F5F5]"
+        className="fixed inset-0 z-[9999] flex w-full min-w-0 flex-col items-stretch overflow-hidden bg-[#F5F5F5]"
         style={{
-          width: 400,
-          minWidth: 400,
-          maxWidth: 400,
-          height: '100%',
-          minHeight: '100%',
+          height: '100dvh',
           boxSizing: 'border-box',
+          paddingTop: 'var(--sat, 0px)',
+          paddingBottom: 'calc(var(--main-block-margin) + env(safe-area-inset-bottom, 0px))',
         }}
       >
-        <LandingHeaderBar onConsultationClick={() => setConsultationModalOpen(true)} />
-
-        <ConsultationModal
-          isOpen={consultationModalOpen}
-          onClose={() => setConsultationModalOpen(false)}
-          onComplete={() => setConsultationModalOpen(false)}
-        />
-
-        {/* Уведомления — колонка: ниже header; верхнее схлопывается, нижнее плавно поднимается */}
         <div
-          className="pointer-events-none absolute left-0 right-0 z-20 flex flex-col items-center px-5"
+          className="relative box-border flex h-full min-h-0 w-full min-w-0 flex-col bg-[#F5F5F5]"
+          style={{ boxSizing: 'border-box' }}
+        >
+          <LandingHeaderBar onConsultationClick={() => setConsultationFlowOpen(true)} />
+
+          {/* Уведомления — колонка: ниже header; верхнее схлопывается, нижнее плавно поднимается */}
+        <div
+          className="pointer-events-none absolute left-0 right-0 z-20 flex flex-col items-center px-[var(--main-block-margin)]"
           style={{ top: 'var(--notification-top)' }}
         >
           {(showCookieBanner || cookieBannerClosing) && (
             <div
-              className="pointer-events-auto w-full max-w-[360px] ease-out"
+              className="pointer-events-auto w-full min-w-0 ease-out"
               style={{
                 maxHeight: cookieBannerClosing ? 0 : 320,
                 opacity: cookieBannerClosing ? 0 : 1,
@@ -296,13 +284,14 @@ export default function ConsultationLandingPage() {
                 countdown={cookieTimer}
                 onClose={() => setCookieBannerClosing(true)}
                 privacyHref={PRIVACY_HREF}
+                onPrivacyLinkClick={onOpenFullPrivacyPolicy}
               />
             </div>
           )}
 
           {(showLeadSuccessBanner || leadSuccessClosing) && (
             <div
-              className="pointer-events-auto w-full max-w-[360px] ease-out"
+              className="pointer-events-auto w-full min-w-0 ease-out"
               style={{
                 maxHeight: leadSuccessClosing ? 0 : 90,
                 opacity: leadSuccessClosing ? 0 : 1,
@@ -323,15 +312,13 @@ export default function ConsultationLandingPage() {
           )}
         </div>
 
-        {/* Главный блок 360×355; внутренняя колонка 330 (поля 330×50) — поля 15 слева/справа */}
+        {/* Главный блок: как на /group-training — тянется между внешними отступами var(--main-block-margin) */}
         <div
           className="absolute box-border bg-white"
           style={{
-            left: 20,
-            // Родитель уже имеет нижний padding, поэтому ставим -8px,
-            // чтобы итоговый отступ карточки от низа экрана был как в модалках (~20px).
-            bottom: -8,
-            width: 360,
+            left: 'var(--main-block-margin)',
+            right: 'var(--main-block-margin)',
+            bottom: 0,
             height: 355,
             borderRadius: 20,
             display: 'flex',
@@ -365,11 +352,12 @@ export default function ConsultationLandingPage() {
             сдали на топ баллов
           </h1>
 
-          {/* Соц.доказательство — ширина как у полей, 330×25 */}
+          {/* Соц.доказательство — на 10px уже полной ширины ряда (как 320 к 330 в макете) */}
           <div
-            className="box-border flex shrink-0 items-center gap-[5px] self-start rounded-[100px] bg-[#F5F5F5] px-[5px]"
+            className="box-border flex min-w-0 shrink-0 items-center gap-[5px] self-start rounded-[100px] bg-[#F5F5F5] px-[5px]"
             style={{
-              width: 330,
+              width: 'calc(100% - 10px)',
+              maxWidth: '100%',
               height: 25,
               minHeight: 25,
               maxHeight: 25,
@@ -387,11 +375,11 @@ export default function ConsultationLandingPage() {
             </span>
           </div>
 
-          <form className="flex w-[330px] max-w-full flex-col gap-[5px]" onSubmit={handleSubmit}>
+          <form className="flex w-full min-w-0 flex-col gap-[5px]" onSubmit={handleSubmit}>
             <label className="sr-only" htmlFor="landing-phone">
               Номер сотового телефона
             </label>
-            <div className="relative shrink-0" style={{ width: 330, maxWidth: '100%' }}>
+            <div className="relative w-full min-w-0 shrink-0">
               <input
                 id="landing-phone"
                 type="tel"
@@ -407,13 +395,12 @@ export default function ConsultationLandingPage() {
                   setPhoneError(false);
                 }}
                 aria-invalid={phoneError}
-                className={`box-border rounded-[10px] border border-solid bg-white px-[15px] outline-none placeholder:text-[rgba(16,16,16,0.5)] ${
+                className={`box-border w-full min-w-0 rounded-[10px] border border-solid bg-white px-[15px] outline-none placeholder:text-[rgba(16,16,16,0.5)] ${
                   phoneError ? 'border-[rgba(16,16,16,0.75)]' : 'border-[rgba(16,16,16,0.25)]'
                 }`}
                 style={{
                   ...involve,
-                  width: 330,
-                  maxWidth: '100%',
+                  width: '100%',
                   height: 50,
                   minHeight: 50,
                   paddingRight: showPhoneTrailingIcon ? 39 : 16,
@@ -442,14 +429,12 @@ export default function ConsultationLandingPage() {
               ) : null}
             </div>
 
-            {/* PrivacyConsent — 330×50 */}
-            <div className="shrink-0" style={{ width: 330, maxWidth: '100%' }}>
+            {/* PrivacyConsent — ширина как у поля телефона */}
+            <div className="w-full min-w-0 shrink-0">
               <button
                 type="button"
-                className="relative box-border flex cursor-pointer items-center rounded-[10px] border border-solid bg-white text-left outline-none focus:outline-none"
+                className="relative box-border flex w-full min-w-0 cursor-pointer items-center rounded-[10px] border border-solid bg-white text-left outline-none focus:outline-none"
                 style={{
-                  width: 330,
-                  maxWidth: '100%',
                   height: 50,
                   minHeight: 50,
                   paddingLeft: 10,
@@ -504,11 +489,10 @@ export default function ConsultationLandingPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="box-border flex shrink-0 cursor-pointer items-center justify-center rounded-[10px] outline-none transition-opacity focus:outline-none disabled:opacity-60"
+              className="box-border flex w-full min-w-0 shrink-0 cursor-pointer items-center justify-center rounded-[10px] outline-none transition-opacity focus:outline-none disabled:opacity-60"
               style={{
                 ...involve,
-                width: 330,
-                maxWidth: '100%',
+                width: '100%',
                 marginTop: 15,
                 height: 50,
                 minHeight: 50,
@@ -526,5 +510,28 @@ export default function ConsultationLandingPage() {
         </div>
       </div>
     </div>
+
+      {consultationFlowOpen ? (
+        <ConsultationFlow
+          onClose={() => {
+            setConsultationFlowOpen(false);
+            router.push('/order');
+          }}
+          onSkip={() => {
+            setConsultationFlowOpen(false);
+            router.push('/order');
+          }}
+          onSubmit={(payload) => {
+            setConsultationFlowOpen(false);
+            if (payload?.method === 'phone') {
+              router.push('/');
+            } else {
+              router.push('/order');
+            }
+          }}
+          initialStep="contact-method"
+        />
+      ) : null}
+    </>
   );
 }

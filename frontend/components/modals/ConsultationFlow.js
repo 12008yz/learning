@@ -108,7 +108,7 @@ export default function ConsultationFlow({ onClose, onSubmit, onSkip, initialSte
 
   const handleNextFromMethod = useCallback(() => {
     if (selectedMethod === 'phone') {
-      setStep('phone-after-method');
+      onSubmit({ phone: phoneNumber, method: 'phone' });
     } else if (selectedMethod) {
       onSubmit({ phone: phoneNumber, method: selectedMethod });
     }
@@ -134,9 +134,12 @@ export default function ConsultationFlow({ onClose, onSubmit, onSkip, initialSte
   }, [onSkip, onClose]);
 
   const renderContactMethod = () => (
-    <div className="relative flex h-full w-full max-w-[400px] flex-col overflow-hidden bg-[#F5F5F5]">
+    <div className="relative flex h-full min-h-0 w-full min-w-0 flex-col overflow-hidden bg-[#F5F5F5]">
       <div className="relative flex-shrink-0" style={{ minHeight: '105px' }}>
-        <div className="absolute left-0 right-0" style={{ top: HINT_TOP, left: 20, right: 20 }}>
+        <div
+          className="absolute left-0 right-0"
+          style={{ top: HINT_TOP, left: 'var(--main-block-margin)', right: 'var(--main-block-margin)' }}
+        >
           <button
             type="button"
             onClick={onClose}
@@ -150,17 +153,15 @@ export default function ConsultationFlow({ onClose, onSubmit, onSkip, initialSte
         </div>
       </div>
       <div
-        className="mx-[5%] flex flex-col rounded-[20px] bg-white"
+        className="mx-auto flex w-full min-w-0 flex-col rounded-[20px] bg-white"
         style={{
-          width: '360px',
-          height: '320px',
-          maxWidth: '360px',
-          marginLeft: 'auto',
-          marginRight: 'auto',
+          marginLeft: 'var(--main-block-margin)',
+          marginRight: 'var(--main-block-margin)',
+          width: 'calc(100% - 2 * var(--main-block-margin))',
+          boxSizing: 'border-box',
           marginTop: 'auto',
           marginBottom: 0,
           padding: '15px',
-          boxSizing: 'border-box',
           border: '1px solid rgba(255,255,255,0.5)',
           backdropFilter: 'blur(7.5px)',
         }}
@@ -248,9 +249,12 @@ export default function ConsultationFlow({ onClose, onSubmit, onSkip, initialSte
   );
 
   const renderPhoneAfterMethod = () => (
-    <div className="relative flex h-full w-full max-w-[400px] flex-col overflow-hidden bg-[#F5F5F5]">
+    <div className="relative flex h-full min-h-0 w-full min-w-0 flex-col overflow-hidden bg-[#F5F5F5]">
       <div className="relative flex-shrink-0" style={{ minHeight: '105px' }}>
-        <div className="absolute left-0 right-0" style={{ top: HINT_TOP, left: 20, right: 20 }}>
+        <div
+          className="absolute left-0 right-0"
+          style={{ top: HINT_TOP, left: 'var(--main-block-margin)', right: 'var(--main-block-margin)' }}
+        >
           <button
             type="button"
             onClick={onClose}
@@ -263,7 +267,19 @@ export default function ConsultationFlow({ onClose, onSubmit, onSkip, initialSte
           </button>
         </div>
       </div>
-      <div className="mx-[5%] flex flex-col rounded-[20px] bg-white" style={{ width: '360px', maxWidth: '360px', marginLeft: 'auto', marginRight: 'auto', marginTop: 'auto', marginBottom: 0, padding: '15px' }} onClick={(e) => e.stopPropagation()}>
+      <div
+        className="mx-auto flex w-full min-w-0 flex-col rounded-[20px] bg-white"
+        style={{
+          marginLeft: 'var(--main-block-margin)',
+          marginRight: 'var(--main-block-margin)',
+          width: 'calc(100% - 2 * var(--main-block-margin))',
+          boxSizing: 'border-box',
+          marginTop: 'auto',
+          marginBottom: 0,
+          padding: '15px',
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
         <div style={{ fontFamily: 'var(--font-involve), system-ui, sans-serif', fontSize: '20px', lineHeight: '125%', color: '#101010', marginBottom: '15px' }}>Консультация</div>
         <div style={{ fontFamily: 'var(--font-involve), system-ui, sans-serif', fontSize: '14px', lineHeight: '105%', color: 'rgba(16, 16, 16, 0.25)', marginBottom: '20px' }}>Напишите номер вашего сотового телефона. Пожалуйста, проверьте правильность</div>
         <div className="mb-[20px] w-full rounded-[10px]" style={{ height: '50px', border: isPhoneValid ? '1px solid #101010' : '1px solid rgba(16, 16, 16, 0.25)' }}>
@@ -293,9 +309,12 @@ export default function ConsultationFlow({ onClose, onSubmit, onSkip, initialSte
   );
 
   const renderPhoneFirst = () => (
-    <div className="relative flex h-full w-full max-w-[400px] flex-col overflow-hidden bg-[#F5F5F5]">
+    <div className="relative flex h-full min-h-0 w-full min-w-0 flex-col overflow-hidden bg-[#F5F5F5]">
       <div className="relative flex-shrink-0" style={{ minHeight: '105px' }}>
-        <div className="absolute left-0 right-0" style={{ top: HINT_TOP, left: 20, right: 20 }}>
+        <div
+          className="absolute left-0 right-0"
+          style={{ top: HINT_TOP, left: 'var(--main-block-margin)', right: 'var(--main-block-margin)' }}
+        >
           <button
             type="button"
             onClick={onClose}
@@ -308,7 +327,19 @@ export default function ConsultationFlow({ onClose, onSubmit, onSkip, initialSte
           </button>
         </div>
       </div>
-      <div className="mx-[5%] flex flex-col rounded-[20px] bg-white" style={{ width: '360px', maxWidth: '360px', marginLeft: 'auto', marginRight: 'auto', marginTop: 'auto', marginBottom: 0, padding: '15px' }} onClick={(e) => e.stopPropagation()}>
+      <div
+        className="mx-auto flex w-full min-w-0 flex-col rounded-[20px] bg-white"
+        style={{
+          marginLeft: 'var(--main-block-margin)',
+          marginRight: 'var(--main-block-margin)',
+          width: 'calc(100% - 2 * var(--main-block-margin))',
+          boxSizing: 'border-box',
+          marginTop: 'auto',
+          marginBottom: 0,
+          padding: '15px',
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
         <div style={{ fontFamily: 'var(--font-involve), system-ui, sans-serif', fontSize: '20px', lineHeight: '125%', color: '#101010', marginBottom: '15px' }}>Консультация</div>
         <div style={{ fontFamily: 'var(--font-involve), system-ui, sans-serif', fontSize: '14px', lineHeight: '105%', color: 'rgba(16, 16, 16, 0.25)', marginBottom: '20px' }}>Напишите номер вашего сотового телефона. Пожалуйста, проверьте правильность</div>
         <div className="mb-[20px] w-full rounded-[10px]" style={{ height: '50px', border: isPhoneValid ? '1px solid #101010' : '1px solid rgba(16, 16, 16, 0.25)' }}>
@@ -351,19 +382,19 @@ export default function ConsultationFlow({ onClose, onSubmit, onSkip, initialSte
 
   return (
     <div
-      className="fixed inset-0 z-[9999] flex cursor-pointer flex-col items-center overflow-hidden bg-[#F5F5F5]"
+      className="fixed inset-0 z-[10050] flex w-full min-w-0 cursor-pointer flex-col items-stretch overflow-hidden bg-[#F5F5F5]"
       style={{
         opacity: isAnimating ? 1 : 0,
         transition: 'opacity 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
         paddingTop: 'var(--sat, 0px)',
-        paddingBottom: 'calc(20px + var(--sab, 0px))',
+        paddingBottom: 'calc(var(--main-block-margin) + var(--sab, 0px))',
         height: '100dvh',
         boxSizing: 'border-box',
       }}
       onClick={handleBackgroundClick}
     >
       <div
-        className="relative flex h-full w-full max-w-[400px] flex-col overflow-hidden bg-[#F5F5F5]"
+        className="relative flex h-full min-h-0 w-full min-w-0 flex-col overflow-hidden bg-[#F5F5F5]"
         style={{
           transform: isAnimating ? 'scale(1)' : 'scale(0.95)',
           transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',

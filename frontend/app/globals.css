@@ -12,6 +12,8 @@
   --sab: env(safe-area-inset-bottom, 0px);
   --sal: env(safe-area-inset-left, 0px);
   --frame-width: 400px;
+  /** Внешние отступы главных блоков от краёв экрана / фрейма */
+  --main-block-margin: 20px;
   --header-top: 10px;
   /** Высота круглых кнопок в шапке (как в next Header) */
   --header-height: 40px;
@@ -40,16 +42,16 @@ body {
   }
 }
 
-/* Карусель Frame3: отступ 20px слева; справа 0 — ширина карточки гибкая, виден правый peek */
+/* Карусель Frame3: внешний отступ слева как у главных блоков; справа 0 — peek */
 .carousel-container {
-  padding-left: 20px;
+  padding-left: var(--main-block-margin);
   padding-right: 0;
 }
 
 /* Карточка подстраивается под ширину контейнера */
 .carousel-container > .carousel-card {
-  width: calc(100% - 19px) !important;
-  min-width: calc(100% - 19px) !important;
+  width: calc(100% - (var(--main-block-margin) - 1px)) !important;
+  min-width: calc(100% - (var(--main-block-margin) - 1px)) !important;
 }
 
 .carousel-spacer-left,
@@ -63,19 +65,19 @@ body {
   .carousel-container {
     padding-left: 0;
     padding-right: 0;
-    scroll-padding-left: 20px;
-    scroll-padding-right: 20px;
+    scroll-padding-left: var(--main-block-margin);
+    scroll-padding-right: var(--main-block-margin);
   }
 
   .carousel-container > .carousel-card {
-    width: calc(100% - 39px) !important;
-    min-width: calc(100% - 39px) !important;
+    width: calc(100% - (2 * var(--main-block-margin) - 1px)) !important;
+    min-width: calc(100% - (2 * var(--main-block-margin) - 1px)) !important;
   }
 
   .carousel-container:not(.carousel-container--single-card) > .carousel-spacer-left,
   .carousel-container:not(.carousel-container--single-card) > .carousel-spacer-right {
-    min-width: 20px !important;
-    width: 20px !important;
+    min-width: var(--main-block-margin) !important;
+    width: var(--main-block-margin) !important;
     flex-shrink: 0;
   }
 
@@ -87,8 +89,8 @@ body {
   }
 
   .carousel-container.carousel-container--single-card > .carousel-card {
-    width: calc(100% - 40px) !important;
-    min-width: calc(100% - 40px) !important;
+    width: calc(100% - (2 * var(--main-block-margin))) !important;
+    min-width: calc(100% - (2 * var(--main-block-margin))) !important;
   }
 }
 
@@ -105,8 +107,8 @@ body {
 }
 
 .carousel-container.carousel-container--single-card > .carousel-card {
-  width: calc(100% - 40px) !important;
-  min-width: calc(100% - 40px) !important;
+  width: calc(100% - (2 * var(--main-block-margin))) !important;
+  min-width: calc(100% - (2 * var(--main-block-margin))) !important;
 }
 
 .scrollbar-hide::-webkit-scrollbar {

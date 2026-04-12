@@ -43,10 +43,19 @@ const compactMessageStyle = {
  * `compact` — 360×70, glass; top: 10px под header (--notification-top), left 20.
  * `stacked` — внутри колонки уведомлений: без absolute top/left, выравнивание даёт родитель.
  */
+const privacyLinkStyle = {
+  color: '#0075FF',
+  textDecoration: 'underline',
+  textDecorationSkipInk: 'none',
+  textUnderlineOffset: '3px',
+};
+
 export default function CookieBanner({
   countdown,
   onClose,
   privacyHref,
+  /** На главной: открыть полный текст политики без перехода по маршруту */
+  onPrivacyLinkClick,
   children,
   compact = false,
   stacked = false,
@@ -54,13 +63,13 @@ export default function CookieBanner({
   if (compact) {
     return (
       <div
-        className={`box-border ${stacked ? 'relative z-20 mx-auto w-full max-w-[360px]' : 'absolute left-5 z-20'}`}
+        className={`box-border ${stacked ? 'relative z-20 mx-auto w-full min-w-0' : 'absolute left-5 z-20'}`}
         style={{
           position: stacked ? 'relative' : 'absolute',
           width: stacked ? '100%' : 360,
-          maxWidth: stacked ? 'min(360px, calc(100vw - 40px))' : undefined,
+          maxWidth: stacked ? '100%' : undefined,
           height: 70,
-          ...(stacked ? {} : { left: 20, top: 'var(--notification-top)' }),
+          ...(stacked ? {} : { left: 'var(--main-block-margin)', top: 'var(--notification-top)' }),
           background: 'rgba(255, 255, 255, 0.85)',
           border: '1px solid rgba(255, 255, 255, 0.5)',
           backdropFilter: 'blur(7.5px)',
@@ -109,10 +118,10 @@ export default function CookieBanner({
   return (
     <div
       className={`z-20 flex flex-col rounded-[20px] bg-white ${
-        stacked ? 'relative mx-auto w-full' : 'absolute left-1/2 -translate-x-1/2'
+        stacked ? 'relative mx-auto w-full min-w-0' : 'absolute left-1/2 -translate-x-1/2'
       }`}
       style={{
-        width: 'min(360px, calc(100vw - 40px))',
+        width: stacked ? '100%' : 'min(360px, calc(100vw - 2 * var(--main-block-margin)))',
         ...(stacked ? {} : { top: 'var(--notification-top)' }),
         padding: 15,
         boxSizing: 'border-box',
@@ -143,11 +152,11 @@ export default function CookieBanner({
         </button>
       </div>
       <div
+        className="min-w-0"
         style={{
           ...bodyTextStyle,
           marginTop: 8,
-          width: 330,
-          maxWidth: '100%',
+          width: '100%',
         }}
       >
         {children || (
@@ -158,17 +167,20 @@ export default function CookieBanner({
             <br />
             файлов куки в соответствии с условиями
             <br />
-            <Link
-              href={privacyHref || '/privacy-policy'}
-              style={{
-                color: '#0075FF',
-                textDecoration: 'underline',
-                textDecorationSkipInk: 'none',
-                textUnderlineOffset: '3px',
-              }}
-            >
-              политики приватности
-            </Link>{' '}
+            {typeof onPrivacyLinkClick === 'function' ? (
+              <button
+                type="button"
+                onClick={onPrivacyLinkClick}
+                className="cursor-pointer border-0 bg-transparent p-0"
+                style={{ ...bodyTextStyle, ...privacyLinkStyle }}
+              >
+                политики приватности
+              </button>
+            ) : (
+              <Link href={privacyHref || '/privacy-policy'} style={privacyLinkStyle}>
+                политики приватности
+              </Link>
+            )}{' '}
             такого портала
           </>
         )}

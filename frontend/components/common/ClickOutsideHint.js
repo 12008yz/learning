@@ -1,7 +1,7 @@
 'use client';
 
-/** Подсказка модалки — на одной вертикали с уведомлениями (ниже header + 10px). */
-export const HINT_TOP = 'var(--notification-top, calc(var(--header-top, 10px) + 50px))';
+/** Отступ сверху внутри блоков с `paddingTop: var(--sat)` — итого от края экрана: safe area + 10px. */
+export const HINT_TOP = '10px';
 
 const hintStyle = {
   width: '240px',

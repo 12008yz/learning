@@ -33,8 +33,11 @@ export default function PrivacyPolicyPage({ onCollapse }) {
 
   return (
     <div className="box-border min-h-[100dvh] w-full max-w-full bg-[#F5F5F5] text-[#101010]">
-      {/* Отступы страницы: сверху 75px, снизу 50px; горизонталь 20px (как left 20px + padding карточки 15px = 35px до текста) */}
-      <div className="box-border mx-auto w-full max-w-[400px] px-[var(--main-block-margin)] pb-[50px] pt-[75px]">
+      {/* Сверху: safe area + 10px; снизу 50px; горизонталь 20px */}
+      <div
+        className="box-border mx-auto w-full max-w-[400px] px-[var(--main-block-margin)] pb-[50px]"
+        style={{ paddingTop: 'calc(var(--sat) + 10px)' }}
+      >
         <button
           type="button"
           onClick={handleCollapse}

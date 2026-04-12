@@ -126,7 +126,7 @@ function TariffDetailsOverlay({ tariff, onCollapse, onConsultation }) {
       }}
     >
       <div className="mx-auto flex h-full min-h-0 w-full max-w-[425px] flex-col">
-        <div className="box-border shrink-0 px-[var(--main-block-margin)] pb-2 pt-[75px]">
+        <div className="box-border shrink-0 px-[var(--main-block-margin)] pb-2 pt-[10px]">
           <button
             type="button"
             onClick={onCollapse}

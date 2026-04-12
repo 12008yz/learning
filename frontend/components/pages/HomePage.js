@@ -11,10 +11,7 @@ export default function HomePage({ privacyPolicyOpen, onOpenPrivacyPolicy, onPri
     <>
       <ConsultationLandingPage onOpenFullPrivacyPolicy={onOpenPrivacyPolicy} />
       {privacyPolicyOpen ? (
-        <div
-          className="fixed inset-0 z-[10000] w-full min-w-0 overflow-y-auto overflow-x-hidden"
-          style={{ paddingTop: 'var(--sat, 0px)' }}
-        >
+        <div className="fixed inset-0 z-[10000] w-full min-w-0 overflow-y-auto overflow-x-hidden">
           <PrivacyPolicyPage onCollapse={onPrivacyCollapse} />
         </div>
       ) : null}

@@ -41,7 +41,7 @@ const wizardSubtitleStyle = {
   marginBottom: 20,
 };
 
-/** Как в ConsultationFlow / GroupTrainingPage / PrivacyPolicyPage */
+/** Как в ConsultationFlow / GroupTrainingPage / PrivacyPolicyPage (кнопка: safe area + 10px). */
 function CollapseIcon() {
   return (
     <span className="flex h-5 w-5 shrink-0 items-center justify-center" aria-hidden>

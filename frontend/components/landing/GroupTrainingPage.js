@@ -143,7 +143,8 @@ function TariffDetailsOverlay({ tariff, onCollapse, onConsultation }) {
           <div className="h-[10px]" aria-hidden />
         </div>
 
-        <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
+        {/* min-w-0: не растягивать flex по ширине карусели; без overflow-x-hidden — не срезать скругления карточек по краям */}
+        <div className="min-h-0 min-w-0 flex-1 overflow-y-auto">
           <div
             ref={scrollRef}
             className="carousel-container scrollbar-hide flex min-h-min flex-nowrap items-start overflow-x-auto overflow-y-hidden"
@@ -178,7 +179,8 @@ function TariffDetailsOverlay({ tariff, onCollapse, onConsultation }) {
           </div>
         </div>
 
-        <div className="box-border w-full shrink-0 rounded-t-[20px] bg-white shadow-[0_-6px_24px_rgba(16,16,16,0.06)]">
+        {/* Без тени с отрицательным offset по Y — она даёт тёмные «ушки» в скруглении; только border + overlap на 1px */}
+        <div className="relative z-[1] -mt-px box-border w-full shrink-0 overflow-hidden rounded-t-[20px] border-t border-[rgba(16,16,16,0.08)] bg-white">
           <div
             className="box-border w-full pt-5"
             style={{

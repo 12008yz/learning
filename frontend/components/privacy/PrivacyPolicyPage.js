@@ -33,9 +33,9 @@ export default function PrivacyPolicyPage({ onCollapse }) {
 
   return (
     <div className="box-border min-h-[100dvh] w-full max-w-full bg-[#F5F5F5] text-[#101010]">
-      {/* Сверху: safe area + 10px; снизу 50px; горизонталь 20px */}
+      {/* Как GroupTraining / модалки: колонна на ширину телефона до 425px, боковые var(--main-block-margin) */}
       <div
-        className="box-border mx-auto w-full max-w-[400px] px-[var(--main-block-margin)] pb-[50px]"
+        className="box-border mx-auto w-full min-w-0 max-w-[425px] px-[var(--main-block-margin)] pb-[calc(var(--main-block-margin)+env(safe-area-inset-bottom,0px)))]"
         style={{ paddingTop: 'calc(var(--sat) + 10px)' }}
       >
         <button
@@ -56,7 +56,7 @@ export default function PrivacyPolicyPage({ onCollapse }) {
         <div className="h-[10px]" aria-hidden />
 
         <article
-          className="subpixel-antialiased box-border mx-auto w-full max-w-[360px] rounded-[20px] border-[0.5px] border-solid border-white/50 bg-white backdrop-blur-[12.5px]"
+          className="subpixel-antialiased mb-[70px] box-border w-full max-w-full rounded-[20px] border-[0.5px] border-solid border-white/50 bg-white backdrop-blur-[12.5px]"
           style={{
             boxShadow: '0 0 0 0.5px rgba(255, 255, 255, 0.5)',
           }}
@@ -75,7 +75,7 @@ export default function PrivacyPolicyPage({ onCollapse }) {
               Политика приватности
             </h1>
             <div
-              className="w-[330px] max-w-full whitespace-pre-line pb-[245px] font-normal"
+              className="w-full max-w-full whitespace-pre-line pb-[245px] font-normal"
               style={{
                 fontFamily: 'var(--font-involve), system-ui, sans-serif',
                 fontStyle: 'normal',

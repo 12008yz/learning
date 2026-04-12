@@ -473,13 +473,13 @@ export default function GroupTrainingPage({ layout = 'viewport', exposeOpenConsu
                 left: 0,
                 right: 0,
                 top: carouselTop,
-                bottom: 'calc(var(--main-block-margin) + env(safe-area-inset-bottom, 0px))',
+                bottom: 0,
                 zIndex: 1,
                 background: '#F5F5F5',
               }}
             >
               <div
-                className="carousel-container carousel-learning scrollbar-hide flex h-full flex-nowrap items-end overflow-x-auto overflow-y-hidden"
+                className="carousel-container carousel-learning scrollbar-hide box-border flex h-full min-h-0 flex-nowrap items-end overflow-x-auto overflow-y-hidden"
                 style={{
                   gap: 5,
                   scrollSnapType: 'x mandatory',
@@ -487,6 +487,8 @@ export default function GroupTrainingPage({ layout = 'viewport', exposeOpenConsu
                   scrollbarWidth: 'none',
                   msOverflowStyle: 'none',
                   overscrollBehaviorX: 'contain',
+                  /* Нижний зазор под карточками (margin у карточек режется overflow-y-hidden у ряда) */
+                  paddingBottom: 'var(--main-block-margin)',
                 }}
               >
                 <div className="carousel-spacer-left shrink-0" aria-hidden style={{ alignSelf: 'stretch' }} />

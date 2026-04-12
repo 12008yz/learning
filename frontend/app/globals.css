@@ -61,56 +61,25 @@ body::-webkit-scrollbar {
   }
 }
 
-/* Карусель Frame3: внешний отступ слева как у главных блоков; справа 0 — peek */
+/* Карусель: отступы слева/справа var(--main-block-margin) через спейсеры на любом вьюпорте
+   (раньше при >768px справа был 0 «peek» — на широком экране колонна max-w 425px оставалась без поля справа). */
 .carousel-container {
-  padding-left: var(--main-block-margin);
+  padding-left: 0;
   padding-right: 0;
+  scroll-padding-left: var(--main-block-margin);
+  scroll-padding-right: var(--main-block-margin);
 }
 
-/* Карточка подстраивается под ширину контейнера */
 .carousel-container > .carousel-card {
-  width: calc(100% - (var(--main-block-margin) - 1px)) !important;
-  min-width: calc(100% - (var(--main-block-margin) - 1px)) !important;
+  width: calc(100% - (2 * var(--main-block-margin) - 1px)) !important;
+  min-width: calc(100% - (2 * var(--main-block-margin) - 1px)) !important;
 }
 
-.carousel-spacer-left,
-.carousel-spacer-right {
-  min-width: 0;
-  width: 0;
+.carousel-container:not(.carousel-container--single-card) > .carousel-spacer-left,
+.carousel-container:not(.carousel-container--single-card) > .carousel-spacer-right {
+  min-width: var(--main-block-margin) !important;
+  width: var(--main-block-margin) !important;
   flex-shrink: 0;
-}
-
-@media (max-width: 768px) {
-  .carousel-container {
-    padding-left: 0;
-    padding-right: 0;
-    scroll-padding-left: var(--main-block-margin);
-    scroll-padding-right: var(--main-block-margin);
-  }
-
-  .carousel-container > .carousel-card {
-    width: calc(100% - (2 * var(--main-block-margin) - 1px)) !important;
-    min-width: calc(100% - (2 * var(--main-block-margin) - 1px)) !important;
-  }
-
-  .carousel-container:not(.carousel-container--single-card) > .carousel-spacer-left,
-  .carousel-container:not(.carousel-container--single-card) > .carousel-spacer-right {
-    min-width: var(--main-block-margin) !important;
-    width: var(--main-block-margin) !important;
-    flex-shrink: 0;
-  }
-
-  .carousel-container.carousel-container--single-card > .carousel-spacer-left,
-  .carousel-container.carousel-container--single-card > .carousel-spacer-right {
-    min-width: 15px !important;
-    width: 15px !important;
-    flex: none;
-  }
-
-  .carousel-container.carousel-container--single-card > .carousel-card {
-    width: calc(100% - (2 * var(--main-block-margin))) !important;
-    min-width: calc(100% - (2 * var(--main-block-margin))) !important;
-  }
 }
 
 .carousel-container.carousel-container--single-card {

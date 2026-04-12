@@ -67,7 +67,11 @@ body::-webkit-scrollbar {
   padding-left: 0;
   padding-right: 0;
   scroll-padding-left: var(--main-block-margin);
-  scroll-padding-right: var(--main-block-margin);
+  scroll-padding-right: calc(var(--main-block-margin) + env(safe-area-inset-right, 0px));
+  /* Иначе flex-ряд может раздуваться по max-content, и % у карточек считаются от scrollWidth — карточка шире экрана (Safari). */
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
 }
 
 .carousel-container > .carousel-card {
@@ -75,11 +79,30 @@ body::-webkit-scrollbar {
   min-width: calc(100% - (2 * var(--main-block-margin) - 1px)) !important;
 }
 
+/* Ширина карточки от колонны (host), а не от раздувающейся полосы flex внутри overflow-x. */
+.tariff-carousel-cq-host {
+  container-type: inline-size;
+  container-name: tariff-carousel;
+}
+
+@container tariff-carousel (min-width: 0px) {
+  .carousel-container:not(.carousel-container--single-card) > .carousel-card {
+    width: calc(100cqi - (2 * var(--main-block-margin) - 1px)) !important;
+    min-width: calc(100cqi - (2 * var(--main-block-margin) - 1px)) !important;
+  }
+}
+
 .carousel-container:not(.carousel-container--single-card) > .carousel-spacer-left,
 .carousel-container:not(.carousel-container--single-card) > .carousel-spacer-right {
   min-width: var(--main-block-margin) !important;
   width: var(--main-block-margin) !important;
   flex-shrink: 0;
+}
+
+.carousel-container:not(.carousel-container--single-card) > .carousel-spacer-right {
+  /* Как у шапки: поле справа + safe area на вырезе. */
+  min-width: calc(var(--main-block-margin) + env(safe-area-inset-right, 0px)) !important;
+  width: calc(var(--main-block-margin) + env(safe-area-inset-right, 0px)) !important;
 }
 
 .carousel-container.carousel-container--single-card {

@@ -142,6 +142,7 @@ function TariffDetailsOverlay({ tariff, onCollapse, onConsultation }) {
 
         {/* min-w-0: не растягивать flex по ширине карусели; без overflow-x-hidden — не срезать скругления карточек по краям */}
         <div className="scrollbar-hide min-h-0 min-w-0 flex-1 overflow-y-auto">
+          <div className="tariff-carousel-cq-host min-w-0 w-full">
           <div
             ref={scrollRef}
             className="carousel-container scrollbar-hide flex min-h-min flex-nowrap items-start overflow-x-auto overflow-y-hidden"
@@ -173,6 +174,7 @@ function TariffDetailsOverlay({ tariff, onCollapse, onConsultation }) {
             <LongTariffCard title="Групповая подготовка" features={GROUP_FEATURES} />
             <LongTariffCard title="Персональная подготовка" features={PERSONAL_FEATURES} />
             <div className="carousel-spacer-right" aria-hidden style={{ alignSelf: 'stretch' }} />
+          </div>
           </div>
         </div>
 
@@ -472,7 +474,7 @@ export default function GroupTrainingPage({ layout = 'viewport', exposeOpenConsu
 
             {/* Контейнер карусели: адаптивный верхний отступ, чтобы в in-app браузерах карточки не обрезались */}
             <div
-              className="carousel-wrapper flex min-h-0 min-w-0 flex-col justify-end"
+              className="tariff-carousel-cq-host carousel-wrapper flex min-h-0 min-w-0 flex-col justify-end"
               style={{
                 position: 'absolute',
                 left: 0,

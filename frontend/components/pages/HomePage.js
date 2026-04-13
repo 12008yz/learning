@@ -212,7 +212,9 @@ export default function HomePage({ privacyPolicyOpen, onOpenPrivacyPolicy, onPri
 
         <div
           ref={scrollRef}
-          className="scrollbar-hide min-h-0 flex-1 snap-y snap-mandatory overflow-y-auto overflow-x-hidden overscroll-y-contain"
+          className={`scrollbar-hide min-h-0 flex-1 snap-y snap-mandatory overflow-x-hidden overscroll-y-contain ${
+            orderStackedWizardSteps ? 'overflow-y-hidden' : 'overflow-y-auto'
+          }`}
         >
           <section
             id={SECTION_IDS.hero}
@@ -263,6 +265,7 @@ export default function HomePage({ privacyPolicyOpen, onOpenPrivacyPolicy, onPri
               layout="stacked"
               initialOrderStep={5}
               exposeOpenConsultation={exposeOrderFinal}
+              onAfterPhoneLead={scrollNavigate.toHero}
             />
           </section>
 

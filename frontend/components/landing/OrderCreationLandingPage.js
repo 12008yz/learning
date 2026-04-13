@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import LandingHeaderBar from '@/components/landing/LandingHeaderBar';
 import ConsultationFlow from '@/components/modals/ConsultationFlow';
 import { HINT_TOP } from '@/components/common/ClickOutsideHint';
+import { OutlineCheckCircle16, OutlineCrossCircle16 } from '@/components/landing/OutlineListIcons';
 
 const involve = {
   fontFamily: 'var(--font-involve), system-ui, sans-serif',
@@ -56,21 +57,6 @@ function CollapseIcon() {
   );
 }
 
-/** Галочка в круге выбранного пункта (как RadioOption / Frame4 во next) */
-function RadioSelectedCheckIcon() {
-  return (
-    <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-      <path
-        d="M1 4L3 6L7 2"
-        stroke="#FFFFFF"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
 /**
  * Один ряд «радио» — как FilterWizard + RadioOption (next): 50px высота, круг справа.
  * @param {{ label: string; selected: boolean; onClick: () => void }} props
@@ -111,16 +97,23 @@ function TariffPrepOption({ label, selected, onClick, showErrorOutline }) {
         {label}
       </span>
       <span
-        className="absolute flex h-4 w-4 items-center justify-center rounded-full"
+        className="absolute flex h-4 w-4 items-center justify-center"
         style={{
           right: 15,
           top: 17,
-          background: selected ? '#101010' : 'transparent',
-          border: selected ? 'none' : '1px solid rgba(16, 16, 16, 0.5)',
-          boxSizing: 'border-box',
         }}
       >
-        {selected ? <RadioSelectedCheckIcon /> : null}
+        {selected ? (
+          <OutlineCheckCircle16 />
+        ) : (
+          <span
+            className="h-4 w-4 rounded-full"
+            style={{
+              border: '1px solid rgba(16, 16, 16, 0.5)',
+              boxSizing: 'border-box',
+            }}
+          />
+        )}
       </span>
     </button>
   );
@@ -156,18 +149,14 @@ function TariffDurationOption({ label, selected, disabled, onClick, showErrorOut
           {label}
         </span>
         <span
-          className="absolute flex h-4 w-4 items-center justify-center rounded-full"
+          className="absolute flex h-4 w-4 items-center justify-center"
           style={{
             right: 15,
             top: 17,
-            border: '1px solid rgba(16, 16, 16, 0.35)',
-            boxSizing: 'border-box',
           }}
           aria-hidden
         >
-          <svg width="6" height="6" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M1 1L5 5M5 1L1 5" stroke="rgba(16,16,16,0.55)" strokeWidth="1" strokeLinecap="round" />
-          </svg>
+          <OutlineCrossCircle16 />
         </span>
       </div>
     );

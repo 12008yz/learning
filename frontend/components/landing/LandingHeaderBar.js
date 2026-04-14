@@ -53,8 +53,7 @@ function PaperPlaneIcon() {
 }
 
 export default function LandingHeaderBar({ onConsultationClick, menuHref = '/' }) {
-  const menuClassName =
-    'flex h-10 w-10 items-center justify-center rounded-full border border-white/50 bg-white backdrop-blur-[5px]';
+  const menuClassName = 'flex h-10 w-10 items-center justify-center rounded-full';
 
   return (
     <>
@@ -88,7 +87,7 @@ export default function LandingHeaderBar({ onConsultationClick, menuHref = '/' }
       >
         <button
           type="button"
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-white/50 bg-white backdrop-blur-[5px] transition-opacity hover:opacity-90"
+          className="flex h-10 w-10 items-center justify-center rounded-full transition-opacity hover:opacity-90"
           aria-label="Связаться"
           onClick={onConsultationClick}
         >

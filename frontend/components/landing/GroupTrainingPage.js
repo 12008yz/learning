@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { dispatchNavigateToOrderLanding } from '@/lib/navigateToOrderLanding';
 import ConsultationFlow from '@/components/modals/ConsultationFlow';
 import LandingHeaderBar from '@/components/landing/LandingHeaderBar';
 import { OutlineCheckCircle16, OutlineCrossCircle16 } from '@/components/landing/OutlineListIcons';
@@ -449,7 +450,10 @@ export default function GroupTrainingPage({ layout = 'viewport', exposeOpenConsu
     return () => exposeOpenConsultation(null);
   }, [isStacked, exposeOpenConsultation]);
   const openTariffDetails = (tariff) => setDetailsTariff(tariff);
-  const closeTariffDetails = () => setDetailsTariff(null);
+  const closeTariffDetails = () => {
+    dispatchNavigateToOrderLanding();
+    setDetailsTariff(null);
+  };
 
   const carouselTop = isStacked
     ? 'clamp(12px, 3vh, 36px)'
@@ -557,16 +561,8 @@ export default function GroupTrainingPage({ layout = 'viewport', exposeOpenConsu
 
       {consultationFlowOpen ? (
         <ConsultationFlow
-          onClose={() => {
-            setConsultationFlowOpen(false);
-            if (isStacked && scrollNavigate?.toOrder) scrollNavigate.toOrder();
-            else router.push('/order');
-          }}
-          onSkip={() => {
-            setConsultationFlowOpen(false);
-            if (isStacked && scrollNavigate?.toOrder) scrollNavigate.toOrder();
-            else router.push('/order');
-          }}
+          onClose={() => setConsultationFlowOpen(false)}
+          onSkip={() => setConsultationFlowOpen(false)}
           onSubmit={(payload) => {
             setConsultationFlowOpen(false);
             if (payload?.method === 'phone') {

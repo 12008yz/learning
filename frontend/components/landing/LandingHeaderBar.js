@@ -52,8 +52,12 @@ function PaperPlaneIcon() {
   );
 }
 
+/** Круг 40×40 под иконку: белый, обводка, blur — как Rectangle 32 / Group 7510 в макете */
+const headerIconCircleClass =
+  'flex h-10 w-10 shrink-0 box-border items-center justify-center rounded-full border border-solid border-white/50 bg-white backdrop-blur-[5px]';
+
 export default function LandingHeaderBar({ onConsultationClick, menuHref = '/' }) {
-  const menuClassName = 'flex h-10 w-10 items-center justify-center rounded-full';
+  const menuClassName = `${headerIconCircleClass} transition-opacity hover:opacity-90`;
 
   return (
     <>
@@ -87,7 +91,7 @@ export default function LandingHeaderBar({ onConsultationClick, menuHref = '/' }
       >
         <button
           type="button"
-          className="flex h-10 w-10 items-center justify-center rounded-full transition-opacity hover:opacity-90"
+          className={`${headerIconCircleClass} transition-opacity hover:opacity-90`}
           aria-label="Связаться"
           onClick={onConsultationClick}
         >

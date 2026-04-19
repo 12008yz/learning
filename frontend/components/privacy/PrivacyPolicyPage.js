@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { dispatchNavigateToOrderLanding } from '@/lib/navigateToOrderLanding';
 import { PRIVACY_POLICY_TEXT } from '@/content/privacyPolicyText';
 
 function CollapseIcon() {
@@ -17,17 +17,10 @@ function CollapseIcon() {
 }
 
 export default function PrivacyPolicyPage({ onCollapse, embedded = false }) {
-  const router = useRouter();
-
   const handleCollapse = () => {
+    dispatchNavigateToOrderLanding();
     if (typeof onCollapse === 'function') {
       onCollapse();
-      return;
-    }
-    if (typeof window !== 'undefined' && window.history.length > 1) {
-      router.back();
-    } else {
-      router.push('/');
     }
   };
 

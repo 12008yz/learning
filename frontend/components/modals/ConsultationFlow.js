@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { HINT_TOP } from '@/components/common/ClickOutsideHint';
+import { dispatchNavigateToOrderLanding } from '@/lib/navigateToOrderLanding';
 
 function CollapseIcon() {
   return (
@@ -142,7 +143,10 @@ export default function ConsultationFlow({ onClose, onSubmit, onSkip, initialSte
         >
           <button
             type="button"
-            onClick={onClose}
+            onClick={() => {
+              dispatchNavigateToOrderLanding();
+              onClose();
+            }}
             className="box-border flex h-10 max-w-[175px] items-center gap-2 rounded-[20px] border border-white/50 bg-white pl-2 pr-3 backdrop-blur-[5px] transition-opacity hover:opacity-90"
           >
             <CollapseIcon />
@@ -257,7 +261,10 @@ export default function ConsultationFlow({ onClose, onSubmit, onSkip, initialSte
         >
           <button
             type="button"
-            onClick={onClose}
+            onClick={() => {
+              dispatchNavigateToOrderLanding();
+              onClose();
+            }}
             className="box-border flex h-10 max-w-[175px] items-center gap-2 rounded-[20px] border border-white/50 bg-white pl-2 pr-3 backdrop-blur-[5px] transition-opacity hover:opacity-90"
           >
             <CollapseIcon />
@@ -317,7 +324,10 @@ export default function ConsultationFlow({ onClose, onSubmit, onSkip, initialSte
         >
           <button
             type="button"
-            onClick={onClose}
+            onClick={() => {
+              dispatchNavigateToOrderLanding();
+              onClose();
+            }}
             className="box-border flex h-10 max-w-[175px] items-center gap-2 rounded-[20px] border border-white/50 bg-white pl-2 pr-3 backdrop-blur-[5px] transition-opacity hover:opacity-90"
           >
             <CollapseIcon />

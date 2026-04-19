@@ -264,7 +264,7 @@ export default function ConsultationLandingPage({
     }
   };
 
-  const notificationsTop = isStacked ? '12px' : 'var(--notification-top)';
+  const notificationsTop = isStacked ? 'var(--notification-top-stacked)' : 'var(--notification-top)';
   const privacyLinkHref = PRIVACY_HREF;
 
   return (
@@ -547,16 +547,8 @@ export default function ConsultationLandingPage({
 
       {consultationFlowOpen ? (
         <ConsultationFlow
-          onClose={() => {
-            setConsultationFlowOpen(false);
-            if (isStacked && scrollNavigate?.toOrder) scrollNavigate.toOrder();
-            else router.push('/order');
-          }}
-          onSkip={() => {
-            setConsultationFlowOpen(false);
-            if (isStacked && scrollNavigate?.toOrder) scrollNavigate.toOrder();
-            else router.push('/order');
-          }}
+          onClose={() => setConsultationFlowOpen(false)}
+          onSkip={() => setConsultationFlowOpen(false)}
           onSubmit={(payload) => {
             setConsultationFlowOpen(false);
             if (payload?.method === 'phone') {

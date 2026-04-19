@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import LandingHeaderBar from '@/components/landing/LandingHeaderBar';
 import ConsultationLandingPage from '@/components/landing/ConsultationLandingPage';
@@ -44,6 +44,24 @@ export default function HomePage({ privacyPolicyOpen, onOpenPrivacyPolicy, onPri
   const openersRef = useRef({ hero: null, tariffs: null, order: null, orderFinal: null });
   const [activeSection, setActiveSection] = useState('hero');
   const searchParams = useSearchParams();
+
+  /**
+   * Чистый заход на / — всегда первый слайд (герой). Иначе сохранённый ?section=order или scroll
+   * restoration после «сворачивания» открывает сайт сразу на 3-й секции.
+   */
+  useLayoutEffect(() => {
+    const root = scrollRef.current;
+    if (!root || typeof window === 'undefined') return;
+    const sp = new URLSearchParams(window.location.search);
+    const sec = sp.get('section');
+    const hasSectionParam = sec && ['tariffs', 'order', 'orderFinal'].includes(sec);
+    const h = window.location.hash.replace(/^#/, '');
+    const hasSectionHash =
+      h === SECTION_IDS.tariffs || h === SECTION_IDS.order || h === SECTION_IDS.orderFinal;
+    if (!hasSectionParam && !hasSectionHash) {
+      root.scrollTop = 0;
+    }
+  }, []);
 
   const scrollNavigate = useMemo(
     () => ({
@@ -128,7 +146,12 @@ export default function HomePage({ privacyPolicyOpen, onOpenPrivacyPolicy, onPri
       orderFinal: SECTION_IDS.orderFinal,
     };
     const id = idMap[section];
-    if (id) requestAnimationFrame(() => scrollSectionIntoView(id, 'auto'));
+    if (id) {
+      requestAnimationFrame(() => {
+        scrollSectionIntoView(id, 'auto');
+        router.replace('/', { scroll: false });
+      });
+    }
   }, [searchParams, router]);
 
   useEffect(() => {
@@ -151,7 +174,12 @@ export default function HomePage({ privacyPolicyOpen, onOpenPrivacyPolicy, onPri
       orderFinal: SECTION_IDS.orderFinal,
     };
     const id = idMap[raw];
-    if (id) requestAnimationFrame(() => scrollSectionIntoView(id, 'auto'));
+    if (id) {
+      requestAnimationFrame(() => {
+        scrollSectionIntoView(id, 'auto');
+        router.replace('/', { scroll: false });
+      });
+    }
   }, [router]);
 
   const handleHeaderConsultation = useCallback(() => {

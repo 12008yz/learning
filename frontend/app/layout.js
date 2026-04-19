@@ -1,5 +1,6 @@
 import localFont from "next/font/local";
 import "./globals.css";
+import NavigateToOrderLandingBridge from "@/components/navigation/NavigateToOrderLandingBridge";
 
 /**
  * Involve — статические TTF из app/fonts (Regular / Medium / SemiBold / Bold + Oblique).
@@ -35,6 +36,7 @@ export default function RootLayout({ children }) {
           fontSynthesis: "none",
         }}
       >
+        <NavigateToOrderLandingBridge />
         {children}
       </body>
     </html>

@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import LandingHeaderBar from '@/components/landing/LandingHeaderBar';
 import ConsultationModal from '@/components/modals/ConsultationModal';
 import { HINT_TOP } from '@/components/common/ClickOutsideHint';
+import { NAVIGATE_TO_ORDER_LANDING_EVENT } from '@/lib/navigateToOrderLanding';
 const involve = {
   fontFamily: 'var(--font-involve), system-ui, sans-serif',
   fontStyle: 'normal',
@@ -319,6 +320,14 @@ export default function OrderCreationLandingPage({
   }, [isStacked, orderStep, onStackedWizardStepsActive]);
 
   useEffect(() => {
+    /** Секция «финальная карточка» (initialOrderStep 5) — отдельный экземпляр, не сбрасывать при глобальном переходе */
+    if (initialOrderStep === 5) return undefined;
+    const resetToLeadCard = () => setOrderStep(0);
+    window.addEventListener(NAVIGATE_TO_ORDER_LANDING_EVENT, resetToLeadCard);
+    return () => window.removeEventListener(NAVIGATE_TO_ORDER_LANDING_EVENT, resetToLeadCard);
+  }, [initialOrderStep]);
+
+  useEffect(() => {
     if (typeof onStackedWizardStepsActive !== 'function') return undefined;
     return () => onStackedWizardStepsActive(false);
   }, [onStackedWizardStepsActive]);
@@ -568,7 +577,7 @@ export default function OrderCreationLandingPage({
         }}
         onClick={buttonHandler}
       >
-        Формирование
+        {headingVariant === 'final' ? 'Профориентирование' : 'Формирование'}
       </button>
     </div>
   );

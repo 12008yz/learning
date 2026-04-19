@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { HINT_TOP } from '@/components/common/ClickOutsideHint';
+import { dispatchNavigateToOrderLanding } from '@/lib/navigateToOrderLanding';
 
 const involve = {
   fontFamily: 'var(--font-involve), system-ui, sans-serif',
@@ -188,7 +189,10 @@ export default function ConsultationModal({ isOpen, onClose, onComplete }) {
           >
             <button
               type="button"
-              onClick={closeWithAnimation}
+              onClick={() => {
+                dispatchNavigateToOrderLanding();
+                closeWithAnimation();
+              }}
               className="box-border flex h-10 max-w-[175px] items-center gap-2 rounded-[20px] border border-white/50 bg-white pl-2 pr-3 backdrop-blur-[5px] transition-opacity hover:opacity-90"
             >
               <CollapseIcon />

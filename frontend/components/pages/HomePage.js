@@ -263,7 +263,7 @@ export default function HomePage({ privacyPolicyOpen, onOpenPrivacyPolicy, onPri
 
         <div
           ref={scrollRef}
-          className={`scrollbar-hide min-h-0 flex-1 snap-y snap-mandatory overflow-x-hidden overscroll-y-contain ${
+          className={`scrollbar-hide min-h-0 flex-1 snap-y snap-mandatory overflow-x-hidden overscroll-y-contain pb-main-scroll-bottom ${
             orderStackedWizardSteps ? 'overflow-y-hidden' : 'overflow-y-auto'
           }`}
         >

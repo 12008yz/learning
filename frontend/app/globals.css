@@ -85,6 +85,14 @@ body::-webkit-scrollbar {
   .text-balance {
     text-wrap: balance;
   }
+
+  /**
+   * Нижний отступ главного вертикального скролла под home indicator / панель Safari.
+   * Используй на контейнере с overflow-y: auto/scroll (не дублируй с тем же отступом на вложенных оболочках).
+   */
+  .pb-main-scroll-bottom {
+    padding-bottom: var(--sab);
+  }
 }
 
 /* Карусель: отступы слева/справа var(--main-block-margin) через спейсеры на любом вьюпорте

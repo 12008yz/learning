@@ -89,7 +89,9 @@ export default function OrdersPanelPage({ embedded = false } = {}) {
   return (
     <div
       className={`bg-[#F5F5F5] text-[#101010] ${
-        embedded ? 'flex h-full min-h-0 flex-col overflow-hidden p-3 pt-2' : 'min-h-[100dvh] p-6'
+        embedded
+          ? 'flex h-full min-h-0 flex-col overflow-hidden p-3 pt-2'
+          : 'min-h-[100dvh] p-6 pb-[calc(1.5rem+var(--sab))]'
       }`}
       style={embedded ? undefined : { paddingTop: 'calc(24px + var(--sat, 0px))' }}
     >

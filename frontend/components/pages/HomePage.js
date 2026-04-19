@@ -218,7 +218,7 @@ export default function HomePage({ privacyPolicyOpen, onOpenPrivacyPolicy, onPri
         className="fixed inset-0 z-0 flex w-full flex-col overflow-hidden bg-[#F5F5F5] text-[#101010]"
         style={{ height: '100dvh', maxHeight: '100dvh' }}
       >
-        <header className="pointer-events-none absolute left-0 right-0 top-0 z-40 pt-[var(--sat)]">
+        <header className="pointer-events-none absolute left-0 right-0 top-0 z-40 bg-[#F5F5F5]/92 pt-[var(--sat)] backdrop-blur-[14px]">
           <div
             className="relative mx-auto w-full max-w-[425px] pointer-events-auto"
             style={{ height: 'calc(var(--header-top) + var(--header-height) + 8px)' }}

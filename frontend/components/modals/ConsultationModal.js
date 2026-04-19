@@ -77,9 +77,15 @@ function isNameValid(name) {
   return name.trim().length >= 2;
 }
 
+/** Пустое поле или только префикс страны — +7 подставляем по фокусу, не до клика */
+function isPhoneVisuallyEmpty(value) {
+  const d = value.replace(/\D/g, '');
+  return d.length === 0 || d === '7';
+}
+
 export default function ConsultationModal({ isOpen, onClose, onComplete }) {
   const [name, setName] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('+7 ');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [submitAttempted, setSubmitAttempted] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [shouldRender, setShouldRender] = useState(false);
@@ -100,10 +106,10 @@ export default function ConsultationModal({ isOpen, onClose, onComplete }) {
         if (rest.length > 8) formatted += ` ${rest.slice(8, 10)}`;
         setPhoneNumber(formatted || '+7 ');
       } else {
-        setPhoneNumber('+7 ');
+        setPhoneNumber('');
       }
     } catch {
-      setPhoneNumber('+7 ');
+      setPhoneNumber('');
     }
     setSubmitAttempted(false);
     requestAnimationFrame(() => setIsAnimating(true));
@@ -119,6 +125,10 @@ export default function ConsultationModal({ isOpen, onClose, onComplete }) {
     if (rest.length > 6) formatted += ` ${rest.slice(6, 8)}`;
     if (rest.length > 8) formatted += ` ${rest.slice(8, 10)}`;
     return formatted;
+  }, []);
+
+  const handlePhoneFocus = useCallback(() => {
+    setPhoneNumber((prev) => (isPhoneVisuallyEmpty(prev) ? '+7 ' : prev));
   }, []);
 
   const phoneValid = useMemo(() => phoneNumber.replace(/\D/g, '').length === 11, [phoneNumber]);
@@ -256,9 +266,11 @@ export default function ConsultationModal({ isOpen, onClose, onComplete }) {
                 type="tel"
                 name="consultation-phone"
                 autoComplete="tel"
+                inputMode="tel"
                 placeholder="Номер сотового телефона"
                 value={phoneNumber}
-                onChange={(e) => setPhoneNumber(formatPhoneNumber(e.target.value) || '+7 ')}
+                onFocus={handlePhoneFocus}
+                onChange={(e) => setPhoneNumber(formatPhoneNumber(e.target.value))}
                 className="box-border w-full rounded-[10px] bg-white pl-[15px] outline-none placeholder:text-[rgba(16,16,16,0.35)]"
                 style={{
                   ...involve,

@@ -36,7 +36,11 @@ export const viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: "#F5F5F5",
+  /** Один тон с --background / html: при тёмной теме ОС meta не должен оставаться «левым». */
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f5f5f5" },
+    { media: "(prefers-color-scheme: dark)", color: "#f5f5f5" },
+  ],
 };
 
 export default function RootLayout({ children }) {

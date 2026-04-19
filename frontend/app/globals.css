@@ -48,7 +48,9 @@ html {
   min-height: 100%;
   min-height: 100dvh;
   color-scheme: light;
-  background: var(--page-canvas-gradient);
+  /* Под градиентом: при rubber-band Safari виден и цвет под слоем — держим тот же #f5, что и макет. */
+  background-color: var(--background);
+  background-image: var(--page-canvas-gradient);
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
@@ -69,17 +71,12 @@ body::-webkit-scrollbar {
   display: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-    --page-canvas-gradient: linear-gradient(180deg, #0c0c0c 0%, #0a0a0a 50%, #121212 100%);
-  }
-  html {
-    color-scheme: dark;
-    background: var(--page-canvas-gradient);
-  }
-}
+/**
+ * Лендинг задуман как светлый макет. Раньше здесь меняли --page-canvas-gradient при
+ * prefers-color-scheme: dark — на iPhone в тёмной теме при overscroll проступала чёрная
+ * подложка html, хотя секции остаются светлыми. Явную тёмную тему можно включить позже
+ * через класс на <html> (например .dark), а не по системной настройке.
+ */
 
 @layer utilities {
   .text-balance {

@@ -506,7 +506,7 @@ export default function OrderCreationLandingPage({
       }}
     >
       <h1 className="m-0 flex-shrink-0" style={{ ...involve, fontSize: 20, lineHeight: '125%', color: '#101010', paddingBottom: 15 }}>
-        {headingVariant === 'final' ? 'Призвание школьников,' : 'Подготавливание школьников'}
+        {headingVariant === 'final' ? 'Призвание школьников,' : 'Формирование своих тарифов'}
         <br />
         {headingVariant === 'final' ? 'с 7 по 11 класс, чтобы все жизненные и деловые мечты' : 'с 5 по 11 класс, чтобы все'}
         <br />

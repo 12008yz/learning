@@ -48,6 +48,7 @@ export default function HomePage({
   const scrollRef = useRef(null);
   const openersRef = useRef({ hero: null, tariffs: null, order: null, orderFinal: null });
   const [activeSection, setActiveSection] = useState('hero');
+  const [heroConsultationOpen, setHeroConsultationOpen] = useState(false);
   const searchParams = useSearchParams();
 
   /**
@@ -232,7 +233,11 @@ export default function HomePage({
           должны быть на position:absolute-ребёнке, иначе хром браузера «ломается».
           Размытие + mask — плавный сход с контентом при скролле.
         */}
-        <header className="pointer-events-none fixed left-0 right-0 top-0 z-40 w-full bg-transparent">
+        <header
+          className={`pointer-events-none fixed left-0 right-0 top-0 z-40 w-full bg-transparent ${
+            heroConsultationOpen ? 'invisible' : ''
+          }`}
+        >
           <div
             aria-hidden
             className="pointer-events-none absolute inset-x-0 top-0 z-0 bg-[#F5F5F5]/88 backdrop-blur-[14px]"
@@ -283,6 +288,7 @@ export default function HomePage({
               exposeOpenConsultation={exposeHero}
               scrollNavigate={scrollNavigate}
               notificationsEnabled={notificationsEnabled}
+              onConsultationFlowOpenChange={setHeroConsultationOpen}
             />
           </section>
 

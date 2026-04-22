@@ -110,6 +110,7 @@ export default function ConsultationLandingPage({
   /** В режиме stacked — скролл к секциям вместо перехода по маршрутам */
   scrollNavigate,
   notificationsEnabled = true,
+  onConsultationFlowOpenChange,
 } = {}) {
   const router = useRouter();
   const isStacked = layout === 'stacked';
@@ -216,6 +217,12 @@ export default function ConsultationLandingPage({
   useEffect(() => {
     setPortalReady(true);
   }, []);
+
+  useEffect(() => {
+    if (typeof onConsultationFlowOpenChange !== 'function') return;
+    onConsultationFlowOpenChange(Boolean(consultationFlowOpen));
+    return () => onConsultationFlowOpenChange(false);
+  }, [consultationFlowOpen, onConsultationFlowOpenChange]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

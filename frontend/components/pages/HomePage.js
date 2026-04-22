@@ -234,11 +234,11 @@ export default function HomePage({ privacyPolicyOpen, onOpenPrivacyPolicy, onPri
             className="pointer-events-none absolute inset-x-0 top-0 z-0 bg-[#F5F5F5]/88 backdrop-blur-[14px]"
             style={{
               height:
-                'calc(var(--sat) + var(--header-top) + var(--header-height) + 8px + 120px)',
+                'calc(var(--sat) + var(--header-top) + var(--header-height) + 8px + 180px)',
               WebkitMaskImage:
-                'radial-gradient(140% 95% at 50% 0%, #000 16%, rgba(0,0,0,0.9) 32%, rgba(0,0,0,0.5) 60%, transparent 100%)',
+                'radial-gradient(145% 110% at 50% 0%, #000 14%, rgba(0,0,0,0.92) 34%, rgba(0,0,0,0.55) 70%, transparent 100%)',
               maskImage:
-                'radial-gradient(140% 95% at 50% 0%, #000 16%, rgba(0,0,0,0.9) 32%, rgba(0,0,0,0.5) 60%, transparent 100%)',
+                'radial-gradient(145% 110% at 50% 0%, #000 14%, rgba(0,0,0,0.92) 34%, rgba(0,0,0,0.55) 70%, transparent 100%)',
             }}
           />
           <div
@@ -263,7 +263,7 @@ export default function HomePage({ privacyPolicyOpen, onOpenPrivacyPolicy, onPri
 
         <div
           ref={scrollRef}
-          className={`scrollbar-hide min-h-0 flex-1 snap-y snap-proximity md:snap-mandatory overflow-x-hidden overscroll-y-contain pb-main-scroll-bottom ${
+          className={`scrollbar-hide min-h-0 flex-1 snap-y snap-mandatory overflow-x-hidden overscroll-y-contain pb-main-scroll-bottom ${
             orderStackedWizardSteps ? 'overflow-y-hidden' : 'overflow-y-auto'
           }`}
           style={{ WebkitOverflowScrolling: 'touch' }}

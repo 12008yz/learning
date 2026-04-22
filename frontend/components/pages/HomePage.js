@@ -49,7 +49,11 @@ export default function HomePage({
   const openersRef = useRef({ hero: null, tariffs: null, order: null, orderFinal: null });
   const [activeSection, setActiveSection] = useState('hero');
   const [heroConsultationOpen, setHeroConsultationOpen] = useState(false);
+  const [orderConsultationOpen, setOrderConsultationOpen] = useState(false);
+  const [orderFinalConsultationOpen, setOrderFinalConsultationOpen] = useState(false);
   const searchParams = useSearchParams();
+  const hideHeaderForConsultation =
+    heroConsultationOpen || orderConsultationOpen || orderFinalConsultationOpen;
 
   /**
    * Чистый заход на / — всегда первый слайд (герой). Иначе сохранённый ?section=order или scroll
@@ -235,7 +239,7 @@ export default function HomePage({
         */}
         <header
           className={`pointer-events-none fixed left-0 right-0 top-0 z-40 w-full bg-transparent ${
-            heroConsultationOpen ? 'invisible' : ''
+            hideHeaderForConsultation ? 'invisible' : ''
           }`}
         >
           <div
@@ -314,6 +318,7 @@ export default function HomePage({
               exposeOpenConsultation={exposeOrder}
               onAfterPhoneLead={scrollNavigate.toHero}
               onStackedWizardStepsActive={setOrderStackedWizardSteps}
+              onConsultationFlowOpenChange={setOrderConsultationOpen}
             />
           </section>
 
@@ -327,6 +332,7 @@ export default function HomePage({
               initialOrderStep={5}
               exposeOpenConsultation={exposeOrderFinal}
               onAfterPhoneLead={scrollNavigate.toHero}
+              onConsultationFlowOpenChange={setOrderFinalConsultationOpen}
             />
           </section>
 

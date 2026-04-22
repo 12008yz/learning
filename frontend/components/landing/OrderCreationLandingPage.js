@@ -239,6 +239,7 @@ export default function OrderCreationLandingPage({
   onAfterPhoneLead,
   /** Только stacked: шаги 1–4 мастера — родитель скрывает глобальную шапку и показывает слот под портал */
   onStackedWizardStepsActive,
+  onConsultationFlowOpenChange,
 } = {}) {
   const router = useRouter();
   const isStacked = layout === 'stacked';
@@ -374,6 +375,12 @@ export default function OrderCreationLandingPage({
     if (typeof onStackedWizardStepsActive !== 'function') return undefined;
     return () => onStackedWizardStepsActive(false);
   }, [onStackedWizardStepsActive]);
+
+  useEffect(() => {
+    if (typeof onConsultationFlowOpenChange !== 'function') return;
+    onConsultationFlowOpenChange(Boolean(consultationFlowOpen));
+    return () => onConsultationFlowOpenChange(false);
+  }, [consultationFlowOpen, onConsultationFlowOpenChange]);
 
   useEffect(() => () => clearStepTransitionHandles(), []);
 

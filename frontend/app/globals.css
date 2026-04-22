@@ -47,6 +47,7 @@
 html {
   min-height: 100%;
   min-height: 100dvh;
+  scroll-behavior: smooth;
   color-scheme: light;
   /* Под градиентом: при rubber-band Safari виден и цвет под слоем — держим тот же #f5, что и макет. */
   background-color: var(--background);
@@ -99,10 +100,26 @@ body::-webkit-scrollbar {
   padding-right: 0;
   scroll-padding-left: var(--main-block-margin);
   scroll-padding-right: calc(var(--main-block-margin) + env(safe-area-inset-right, 0px));
+  scroll-snap-type: x proximity;
+  scroll-snap-stop: normal;
+  scroll-behavior: smooth;
+  touch-action: pan-x;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
   /* Иначе flex-ряд может раздуваться по max-content, и % у карточек считаются от scrollWidth — карточка шире экрана (Safari). */
   min-width: 0;
   width: 100%;
   max-width: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .carousel-container {
+    scroll-behavior: auto;
+  }
 }
 
 .carousel-container > .carousel-card {

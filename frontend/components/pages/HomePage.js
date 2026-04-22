@@ -238,7 +238,7 @@ export default function HomePage({
             className="pointer-events-none absolute inset-x-0 top-0 z-0 bg-[#F5F5F5]/88 backdrop-blur-[14px]"
             style={{
               height:
-                'calc(var(--sat) + var(--header-top) + var(--header-height) + 8px + 180px)',
+                'calc(var(--sat) + var(--header-top) + var(--header-height) + 8px + 160px)',
               WebkitMaskImage:
                 'radial-gradient(145% 110% at 50% 0%, #000 14%, rgba(0,0,0,0.92) 34%, rgba(0,0,0,0.55) 70%, transparent 100%)',
               maskImage:

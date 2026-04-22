@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { createPortal } from 'react-dom';
 import ConsultationFlow from '@/components/modals/ConsultationFlow';
 import CookieBanner from '@/components/notifications/CookieBanner';
 import LandingHeaderBar from '@/components/landing/LandingHeaderBar';
@@ -132,6 +133,7 @@ export default function ConsultationLandingPage({
   const [leadSuccessTimer, setLeadSuccessTimer] = useState(7);
   const [cookieBannerClosing, setCookieBannerClosing] = useState(false);
   const [leadSuccessClosing, setLeadSuccessClosing] = useState(false);
+  const [portalReady, setPortalReady] = useState(false);
 
   const phoneValid = !phoneError && isPhoneInputValid(phone);
   const showPhoneSuccessIcon = phoneValid;
@@ -210,6 +212,10 @@ export default function ConsultationLandingPage({
     return () => clearTimeout(id);
   }, [showLeadSuccessBanner, router, onAfterLeadSuccess, isStacked]);
 
+  useEffect(() => {
+    setPortalReady(true);
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     /* Тёмная рамка политики — при любой отправке без галочки (в т.ч. если телефон пустой и раньше был return) */
@@ -266,6 +272,57 @@ export default function ConsultationLandingPage({
 
   const notificationsTop = isStacked ? 'var(--notification-top-stacked)' : 'var(--notification-top)';
   const privacyLinkHref = PRIVACY_HREF;
+  const notificationsNode = (
+    <div
+      className={`pointer-events-none left-0 right-0 flex flex-col items-center px-[var(--main-block-margin)] ${
+        isStacked ? 'fixed z-[10060] mx-auto w-full max-w-[425px]' : 'absolute z-20'
+      }`}
+      style={isStacked ? { top: notificationsTop, isolation: 'isolate' } : { top: notificationsTop }}
+    >
+      {(showCookieBanner || cookieBannerClosing) && (
+        <div
+          className="pointer-events-auto w-full min-w-0 ease-out"
+          style={{
+            maxHeight: cookieBannerClosing ? 0 : 320,
+            opacity: cookieBannerClosing ? 0 : 1,
+            marginBottom: cookieBannerClosing ? 0 : 8,
+            overflow: 'hidden',
+            transition: `max-height ${NOTIFICATION_EXIT_TRANSITION_MS}ms ease-out, opacity ${NOTIFICATION_EXIT_TRANSITION_MS}ms ease-out, margin-bottom ${NOTIFICATION_EXIT_TRANSITION_MS}ms ease-out`,
+          }}
+        >
+          <CookieBanner
+            stacked
+            countdown={cookieTimer}
+            onClose={() => setCookieBannerClosing(true)}
+            privacyHref={privacyLinkHref}
+            onPrivacyLinkClick={onOpenFullPrivacyPolicy}
+          />
+        </div>
+      )}
+
+      {(showLeadSuccessBanner || leadSuccessClosing) && (
+        <div
+          className="pointer-events-auto w-full min-w-0 ease-out"
+          style={{
+            maxHeight: leadSuccessClosing ? 0 : 90,
+            opacity: leadSuccessClosing ? 0 : 1,
+            overflow: 'hidden',
+            transition: `max-height ${NOTIFICATION_EXIT_TRANSITION_MS}ms ease-out, opacity ${NOTIFICATION_EXIT_TRANSITION_MS}ms ease-out`,
+          }}
+        >
+          <CookieBanner
+            stacked
+            compact
+            countdown={leadSuccessTimer}
+            onClose={() => setLeadSuccessClosing(true)}
+            privacyHref={PRIVACY_HREF}
+          >
+            Информация направлена, ожидайте звонок
+          </CookieBanner>
+        </div>
+      )}
+    </div>
+  );
 
   return (
     <>
@@ -297,54 +354,8 @@ export default function ConsultationLandingPage({
         >
           {!isStacked ? <LandingHeaderBar onConsultationClick={() => setConsultationFlowOpen(true)} /> : null}
 
-          {/* Уведомления — колонка: ниже header; верхнее схлопывается, нижнее плавно поднимается */}
-        <div
-          className="pointer-events-none absolute left-0 right-0 z-20 flex flex-col items-center px-[var(--main-block-margin)]"
-          style={{ top: notificationsTop }}
-        >
-          {(showCookieBanner || cookieBannerClosing) && (
-            <div
-              className="pointer-events-auto w-full min-w-0 ease-out"
-              style={{
-                maxHeight: cookieBannerClosing ? 0 : 320,
-                opacity: cookieBannerClosing ? 0 : 1,
-                marginBottom: cookieBannerClosing ? 0 : 8,
-                overflow: 'hidden',
-                transition: `max-height ${NOTIFICATION_EXIT_TRANSITION_MS}ms ease-out, opacity ${NOTIFICATION_EXIT_TRANSITION_MS}ms ease-out, margin-bottom ${NOTIFICATION_EXIT_TRANSITION_MS}ms ease-out`,
-              }}
-            >
-              <CookieBanner
-                stacked
-                countdown={cookieTimer}
-                onClose={() => setCookieBannerClosing(true)}
-                privacyHref={privacyLinkHref}
-                onPrivacyLinkClick={onOpenFullPrivacyPolicy}
-              />
-            </div>
-          )}
-
-          {(showLeadSuccessBanner || leadSuccessClosing) && (
-            <div
-              className="pointer-events-auto w-full min-w-0 ease-out"
-              style={{
-                maxHeight: leadSuccessClosing ? 0 : 90,
-                opacity: leadSuccessClosing ? 0 : 1,
-                overflow: 'hidden',
-                transition: `max-height ${NOTIFICATION_EXIT_TRANSITION_MS}ms ease-out, opacity ${NOTIFICATION_EXIT_TRANSITION_MS}ms ease-out`,
-              }}
-            >
-              <CookieBanner
-                stacked
-                compact
-                countdown={leadSuccessTimer}
-                onClose={() => setLeadSuccessClosing(true)}
-                privacyHref={PRIVACY_HREF}
-              >
-                Информация направлена, ожидайте звонок
-              </CookieBanner>
-            </div>
-          )}
-        </div>
+          {/* Уведомления — в отдельном слое (portal), чтобы не попадать под блюр шапки */}
+          {isStacked ? (portalReady ? createPortal(notificationsNode, document.body) : null) : notificationsNode}
 
         {/* Главный блок: как на /group-training — тянется между внешними отступами var(--main-block-margin) */}
         <div

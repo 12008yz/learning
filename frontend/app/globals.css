@@ -103,7 +103,6 @@ body::-webkit-scrollbar {
   scroll-snap-type: x proximity;
   scroll-snap-stop: normal;
   scroll-behavior: smooth;
-  touch-action: pan-x;
   overscroll-behavior-x: contain;
   -webkit-overflow-scrolling: touch;
   /* Иначе flex-ряд может раздуваться по max-content, и % у карточек считаются от scrollWidth — карточка шире экрана (Safari). */

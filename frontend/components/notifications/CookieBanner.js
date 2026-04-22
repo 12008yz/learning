@@ -70,10 +70,10 @@ export default function CookieBanner({
           maxWidth: stacked ? '100%' : undefined,
           height: 70,
           ...(stacked ? {} : { left: 'var(--main-block-margin)', top: 'var(--notification-top)' }),
-          background: 'rgba(255, 255, 255, 0.85)',
+          background: stacked ? '#FFFFFF' : 'rgba(255, 255, 255, 0.85)',
           border: '1px solid rgba(255, 255, 255, 0.5)',
-          backdropFilter: 'blur(7.5px)',
-          WebkitBackdropFilter: 'blur(7.5px)',
+          backdropFilter: stacked ? 'none' : 'blur(7.5px)',
+          WebkitBackdropFilter: stacked ? 'none' : 'blur(7.5px)',
           borderRadius: 20,
           boxSizing: 'border-box',
         }}
@@ -125,7 +125,9 @@ export default function CookieBanner({
         ...(stacked ? {} : { top: 'var(--notification-top)' }),
         padding: 15,
         boxSizing: 'border-box',
-        backdropFilter: 'blur(7.5px)',
+        background: '#FFFFFF',
+        backdropFilter: stacked ? 'none' : 'blur(7.5px)',
+        WebkitBackdropFilter: stacked ? 'none' : 'blur(7.5px)',
       }}
       onClick={(e) => e.stopPropagation()}
       role="region"

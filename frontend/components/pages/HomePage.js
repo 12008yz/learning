@@ -234,11 +234,11 @@ export default function HomePage({ privacyPolicyOpen, onOpenPrivacyPolicy, onPri
             className="pointer-events-none absolute inset-x-0 top-0 z-0 bg-[#F5F5F5]/88 backdrop-blur-[14px]"
             style={{
               height:
-                'calc(var(--sat) + var(--header-top) + var(--header-height) + 8px + 44px)',
+                'calc(var(--sat) + var(--header-top) + var(--header-height) + 8px + 120px)',
               WebkitMaskImage:
-                'linear-gradient(to bottom, #000 0%, #000 38%, rgba(0,0,0,0.55) 68%, transparent 100%)',
+                'radial-gradient(140% 95% at 50% 0%, #000 16%, rgba(0,0,0,0.9) 32%, rgba(0,0,0,0.5) 60%, transparent 100%)',
               maskImage:
-                'linear-gradient(to bottom, #000 0%, #000 38%, rgba(0,0,0,0.55) 68%, transparent 100%)',
+                'radial-gradient(140% 95% at 50% 0%, #000 16%, rgba(0,0,0,0.9) 32%, rgba(0,0,0,0.5) 60%, transparent 100%)',
             }}
           />
           <div

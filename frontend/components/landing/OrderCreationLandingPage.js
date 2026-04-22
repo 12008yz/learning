@@ -5,7 +5,7 @@ import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import LandingHeaderBar from '@/components/landing/LandingHeaderBar';
-import ConsultationFlow from '@/components/modals/ConsultationFlow';
+import ConsultationModal from '@/components/modals/ConsultationModal';
 import { HINT_TOP } from '@/components/common/ClickOutsideHint';
 import { NAVIGATE_TO_ORDER_LANDING_EVENT } from '@/lib/navigateToOrderLanding';
 const involve = {
@@ -442,17 +442,15 @@ export default function OrderCreationLandingPage({
     }
   };
 
-  /** Как в ConsultationLandingPage / GroupTrainingPage: сначала экран с каналами (Max / Telegram / телефон). */
+  /** В сценарии заказа: сразу форма «Имя + номер», без шага выбора канала. */
   const handleConsultationFlowSubmit = async (payload) => {
     setConsultationFlowOpen(false);
     if (!payload?.phone) return;
-    const contactMethod =
-      payload.method === 'telegram'
-        ? 'telegram'
-        : payload.method === 'phone' || payload.method == null
-          ? 'phone'
-          : payload.method;
-    await submitOrderLead({ name: null, phone: payload.phone, contactMethod });
+    // Сбрасываем мастер, чтобы родитель снял блокировку вертикального скролла (overflow-y-hidden).
+    setOrderStep(0);
+    // Не блокируем переход на первую страницу сетевым запросом:
+    // UI должен продолжаться сразу после закрытия модалки.
+    void submitOrderLead({ name: payload.name || null, phone: payload.phone, contactMethod: 'phone' });
     if (typeof onAfterPhoneLead === 'function') {
       onAfterPhoneLead();
     } else {
@@ -864,11 +862,10 @@ export default function OrderCreationLandingPage({
       {stackedWizardCollapsePortal}
 
       {consultationFlowOpen ? (
-        <ConsultationFlow
+        <ConsultationModal
+          isOpen={consultationFlowOpen}
           onClose={() => setConsultationFlowOpen(false)}
-          onSkip={() => setConsultationFlowOpen(false)}
-          onSubmit={handleConsultationFlowSubmit}
-          initialStep="contact-method"
+          onComplete={handleConsultationFlowSubmit}
         />
       ) : null}
     </>

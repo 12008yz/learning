@@ -143,12 +143,13 @@ export default function ConsultationModal({ isOpen, onClose, onComplete }) {
   const nameShowSuccess = nameValid && name.trim().length > 0;
   const phoneShowSuccess = phoneValid;
 
-  const closeWithAnimation = useCallback(() => {
+  const closeWithAnimation = useCallback((afterClose) => {
     setIsAnimating(false);
     setTimeout(() => {
       setShouldRender(false);
+      if (typeof afterClose === 'function') afterClose();
       onClose();
-    }, 300);
+    }, 220);
   }, [onClose]);
 
   const handleSubmit = useCallback(() => {
@@ -161,8 +162,9 @@ export default function ConsultationModal({ isOpen, onClose, onComplete }) {
     } catch {
       // ignore
     }
-    if (typeof onComplete === 'function') onComplete({ name: name.trim(), phone: phoneNumber });
-    closeWithAnimation();
+    closeWithAnimation(() => {
+      if (typeof onComplete === 'function') onComplete({ name: name.trim(), phone: phoneNumber });
+    });
   }, [closeWithAnimation, formValid, name, onComplete, phoneNumber]);
 
   if (!isOpen && !shouldRender) return null;
@@ -177,7 +179,7 @@ export default function ConsultationModal({ isOpen, onClose, onComplete }) {
       className="fixed inset-0 z-[9999] flex w-full min-w-0 flex-col items-stretch overflow-hidden cursor-pointer bg-[#F5F5F5]"
       style={{
         opacity: isAnimating ? 1 : 0,
-        transition: 'opacity 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
+        transition: 'opacity 220ms ease-out',
         paddingTop: 'var(--sat, 0px)',
         paddingBottom: 'calc(var(--main-block-margin) + var(--sab, 0px))',
         height: '100dvh',
@@ -185,13 +187,7 @@ export default function ConsultationModal({ isOpen, onClose, onComplete }) {
       }}
       onClick={closeWithAnimation}
     >
-      <div
-        className="relative flex h-full min-h-0 w-full min-w-0 flex-col overflow-hidden bg-[#F5F5F5]"
-        style={{
-          transform: isAnimating ? 'scale(1)' : 'scale(0.95)',
-          transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
-        }}
-      >
+      <div className="relative flex h-full min-h-0 w-full min-w-0 flex-col overflow-hidden bg-[#F5F5F5]">
         <div className="relative flex-shrink-0 cursor-pointer" style={{ minHeight: '105px' }}>
           <div
             className="absolute left-0 right-0"

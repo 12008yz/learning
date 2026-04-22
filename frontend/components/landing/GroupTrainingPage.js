@@ -437,7 +437,7 @@ export default function GroupTrainingPage({ layout = 'viewport', exposeOpenConsu
   const router = useRouter();
   const isStacked = layout === 'stacked';
   const [consultationFlowOpen, setConsultationFlowOpen] = useState(false);
-  const [detailsTariff, setDetailsTariff] = useState(null);
+  const [detailsTariff] = useState(null);
 
   const openConsultation = () => {
     setDetailsTariff(null);
@@ -452,7 +452,13 @@ export default function GroupTrainingPage({ layout = 'viewport', exposeOpenConsu
     });
     return () => exposeOpenConsultation(null);
   }, [isStacked, exposeOpenConsultation]);
-  const openTariffDetails = (tariff) => setDetailsTariff(tariff);
+  const openTariffDetails = () => {
+    if (isStacked && scrollNavigate?.toHero) {
+      scrollNavigate.toHero();
+      return;
+    }
+    router.push('/');
+  };
   const closeTariffDetails = () => {
     dispatchNavigateToOrderLanding();
     setDetailsTariff(null);
@@ -544,7 +550,7 @@ export default function GroupTrainingPage({ layout = 'viewport', exposeOpenConsu
                   price="4800 руб."
                   priceCaption="Месячная плата за один предмет"
                   buttonLabel="Консультирование"
-                  onButtonClick={() => openTariffDetails('group')}
+                  onButtonClick={openTariffDetails}
                 />
 
                 <EducationTariffCard
@@ -554,7 +560,7 @@ export default function GroupTrainingPage({ layout = 'viewport', exposeOpenConsu
                   price="20400 руб."
                   priceCaption="Месячная плата за один предмет"
                   buttonLabel="Консультирование"
-                  onButtonClick={() => openTariffDetails('personal')}
+                  onButtonClick={openTariffDetails}
                 />
 
                 <div className="carousel-spacer-right shrink-0" aria-hidden />

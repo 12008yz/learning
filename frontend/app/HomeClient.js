@@ -155,6 +155,7 @@ export default function HomeClient() {
           privacyPolicyOpen={privacyPolicyOpen}
           onOpenPrivacyPolicy={() => setPrivacyPolicyOpen(true)}
           onPrivacyCollapse={() => setPrivacyPolicyOpen(false)}
+          notificationsEnabled={!showAppLoading}
         />
       </main>
     </div>

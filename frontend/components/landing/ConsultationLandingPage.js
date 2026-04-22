@@ -109,6 +109,7 @@ export default function ConsultationLandingPage({
   exposeOpenConsultation,
   /** В режиме stacked — скролл к секциям вместо перехода по маршрутам */
   scrollNavigate,
+  notificationsEnabled = true,
 } = {}) {
   const router = useRouter();
   const isStacked = layout === 'stacked';
@@ -153,7 +154,7 @@ export default function ConsultationLandingPage({
   }, []);
 
   useEffect(() => {
-    if (!showCookieBanner || cookieTimer <= 0 || cookieBannerClosing) return;
+    if (!notificationsEnabled || !showCookieBanner || cookieTimer <= 0 || cookieBannerClosing) return;
     const id = setInterval(() => {
       setCookieTimer((prev) => {
         if (prev <= 0) return 0;
@@ -165,7 +166,7 @@ export default function ConsultationLandingPage({
       });
     }, 1000);
     return () => clearInterval(id);
-  }, [showCookieBanner, cookieTimer, cookieBannerClosing]);
+  }, [notificationsEnabled, showCookieBanner, cookieTimer, cookieBannerClosing]);
 
   useEffect(() => {
     if (!cookieBannerClosing) return;
@@ -177,7 +178,7 @@ export default function ConsultationLandingPage({
   }, [cookieBannerClosing]);
 
   useEffect(() => {
-    if (!showLeadSuccessBanner || leadSuccessTimer <= 0 || leadSuccessClosing) return;
+    if (!notificationsEnabled || !showLeadSuccessBanner || leadSuccessTimer <= 0 || leadSuccessClosing) return;
     const id = setInterval(() => {
       setLeadSuccessTimer((prev) => {
         if (prev <= 0) return 0;
@@ -189,7 +190,7 @@ export default function ConsultationLandingPage({
       });
     }, 1000);
     return () => clearInterval(id);
-  }, [showLeadSuccessBanner, leadSuccessTimer, leadSuccessClosing]);
+  }, [notificationsEnabled, showLeadSuccessBanner, leadSuccessTimer, leadSuccessClosing]);
 
   useEffect(() => {
     if (!leadSuccessClosing) return;
@@ -355,7 +356,13 @@ export default function ConsultationLandingPage({
           {!isStacked ? <LandingHeaderBar onConsultationClick={() => setConsultationFlowOpen(true)} /> : null}
 
           {/* Уведомления — в отдельном слое (portal), чтобы не попадать под блюр шапки */}
-          {isStacked ? (portalReady ? createPortal(notificationsNode, document.body) : null) : notificationsNode}
+          {notificationsEnabled
+            ? isStacked
+              ? portalReady
+                ? createPortal(notificationsNode, document.body)
+                : null
+              : notificationsNode
+            : null}
 
         {/* Главный блок: как на /group-training — тянется между внешними отступами var(--main-block-margin) */}
         <div

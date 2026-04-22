@@ -38,7 +38,12 @@ const sectionShellClass = 'snap-start snap-normal md:snap-always box-border shri
  * Главная: герой, тарифы, мастер заявки и финальный экран в одном вертикальном скролле (snap + поблочный wheel);
  * заявки и политика — отдельные маршруты /orders и /privacy-policy; политика из куки — оверлей.
  */
-export default function HomePage({ privacyPolicyOpen, onOpenPrivacyPolicy, onPrivacyCollapse }) {
+export default function HomePage({
+  privacyPolicyOpen,
+  onOpenPrivacyPolicy,
+  onPrivacyCollapse,
+  notificationsEnabled = true,
+}) {
   const router = useRouter();
   const scrollRef = useRef(null);
   const openersRef = useRef({ hero: null, tariffs: null, order: null, orderFinal: null });
@@ -278,6 +283,7 @@ export default function HomePage({ privacyPolicyOpen, onOpenPrivacyPolicy, onPri
               onOpenFullPrivacyPolicy={onOpenPrivacyPolicy}
               exposeOpenConsultation={exposeHero}
               scrollNavigate={scrollNavigate}
+              notificationsEnabled={notificationsEnabled}
             />
           </section>
 

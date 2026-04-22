@@ -89,6 +89,7 @@ function TariffPrepOption({ label, selected, onClick, showErrorOutline }) {
         background: '#FFFFFF',
         paddingLeft: 15,
         paddingRight: 15,
+        transition: 'border-color 240ms cubic-bezier(0.22, 1, 0.36, 1)',
       }}
     >
       <span
@@ -102,6 +103,7 @@ function TariffPrepOption({ label, selected, onClick, showErrorOutline }) {
           fontSize: 16,
           lineHeight: '125%',
           color: selected ? '#101010' : 'rgba(16, 16, 16, 0.5)',
+          transition: 'color 220ms cubic-bezier(0.22, 1, 0.36, 1)',
         }}
       >
         {label}
@@ -113,17 +115,29 @@ function TariffPrepOption({ label, selected, onClick, showErrorOutline }) {
           top: 17,
         }}
       >
-        {selected ? (
-          <FormSelectedCheckIcon />
-        ) : (
-          <span
-            className="h-4 w-4 rounded-full"
-            style={{
-              border: '1px solid rgba(16, 16, 16, 0.5)',
-              boxSizing: 'border-box',
-            }}
-          />
-        )}
+        <span
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            transition:
+              'opacity 220ms cubic-bezier(0.22, 1, 0.36, 1), transform 220ms cubic-bezier(0.22, 1, 0.36, 1)',
+            opacity: selected ? 1 : 0.92,
+            transform: selected ? 'scale(1)' : 'scale(0.96)',
+          }}
+        >
+          {selected ? (
+            <FormSelectedCheckIcon />
+          ) : (
+            <span
+              className="h-4 w-4 rounded-full"
+              style={{
+                border: '1px solid rgba(16, 16, 16, 0.5)',
+                boxSizing: 'border-box',
+              }}
+            />
+          )}
+        </span>
       </span>
     </button>
   );
@@ -219,8 +233,8 @@ const DURATION_OPTIONS = [
   { id: '9m', label: 'на 9 мес. · скидка «17 проц.»', disabled: true },
 ];
 
-const STEP_DISSOLVE_OUT_MS = 170;
-const STEP_DISSOLVE_IN_MS = 220;
+const STEP_DISSOLVE_OUT_MS = 220;
+const STEP_DISSOLVE_IN_MS = 300;
 
 /** Предметы — мультивыбор */
 const SUBJECT_OPTIONS = [
@@ -524,11 +538,11 @@ export default function OrderCreationLandingPage({
   const wizardDissolveStyle = {
     opacity: stepVisualState === 'in' ? 1 : 0,
     filter: stepVisualState === 'in' ? 'blur(0px)' : 'blur(5px)',
-    transform: stepVisualState === 'in' ? 'translateY(0px) scale(1)' : 'translateY(8px) scale(0.992)',
+    transform: stepVisualState === 'in' ? 'translateY(0px) scale(1)' : 'translateY(10px) scale(0.99)',
     transition:
       stepVisualState === 'out'
-        ? `opacity ${STEP_DISSOLVE_OUT_MS}ms ease-out, filter ${STEP_DISSOLVE_OUT_MS}ms ease-out, transform ${STEP_DISSOLVE_OUT_MS}ms ease-out`
-        : `opacity ${STEP_DISSOLVE_IN_MS}ms ease-out, filter ${STEP_DISSOLVE_IN_MS}ms ease-out, transform ${STEP_DISSOLVE_IN_MS}ms ease-out`,
+        ? `opacity ${STEP_DISSOLVE_OUT_MS}ms cubic-bezier(0.4, 0, 1, 1), filter ${STEP_DISSOLVE_OUT_MS}ms cubic-bezier(0.4, 0, 1, 1), transform ${STEP_DISSOLVE_OUT_MS}ms cubic-bezier(0.4, 0, 1, 1)`
+        : `opacity ${STEP_DISSOLVE_IN_MS}ms cubic-bezier(0.22, 1, 0.36, 1), filter ${STEP_DISSOLVE_IN_MS}ms cubic-bezier(0.22, 1, 0.36, 1), transform ${STEP_DISSOLVE_IN_MS}ms cubic-bezier(0.22, 1, 0.36, 1)`,
     willChange: 'opacity, transform',
   };
 

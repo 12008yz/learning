@@ -16,6 +16,7 @@ const SECTION_IDS = {
 };
 
 const SECTION_ORDER = [SECTION_IDS.hero, SECTION_IDS.tariffs, SECTION_IDS.order, SECTION_IDS.orderFinal];
+const WHEEL_SCROLL_DURATION_MS = 700;
 
 function scrollSectionIntoView(id, behavior = 'auto') {
   if (typeof document === 'undefined') return;
@@ -46,6 +47,7 @@ export default function HomePage({
 }) {
   const router = useRouter();
   const scrollRef = useRef(null);
+  const wheelScrollRafRef = useRef(null);
   const openersRef = useRef({ hero: null, tariffs: null, order: null, orderFinal: null });
   const [activeSection, setActiveSection] = useState('hero');
   const [heroConsultationOpen, setHeroConsultationOpen] = useState(false);
@@ -75,10 +77,10 @@ export default function HomePage({
 
   const scrollNavigate = useMemo(
     () => ({
-      toOrder: () => scrollSectionIntoView(SECTION_IDS.order, 'auto'),
-      toOrderFinal: () => scrollSectionIntoView(SECTION_IDS.orderFinal, 'auto'),
+      toOrder: () => scrollSectionIntoView(SECTION_IDS.order, 'smooth'),
+      toOrderFinal: () => scrollSectionIntoView(SECTION_IDS.orderFinal, 'smooth'),
       toHero: () => scrollSectionIntoView(SECTION_IDS.hero, 'smooth'),
-      toTariffs: () => scrollSectionIntoView(SECTION_IDS.tariffs, 'auto'),
+      toTariffs: () => scrollSectionIntoView(SECTION_IDS.tariffs, 'smooth'),
     }),
     []
   );
@@ -111,6 +113,35 @@ export default function HomePage({
     const root = scrollRef.current;
     if (!root) return;
 
+    const animateWheelScrollBy = (deltaTop) => {
+      if (wheelScrollRafRef.current) {
+        cancelAnimationFrame(wheelScrollRafRef.current);
+        wheelScrollRafRef.current = null;
+      }
+
+      const startTop = root.scrollTop;
+      const maxTop = Math.max(0, root.scrollHeight - root.clientHeight);
+      const targetTop = Math.min(maxTop, Math.max(0, startTop + deltaTop));
+      const distance = targetTop - startTop;
+      if (Math.abs(distance) < 1) return;
+
+      const startTime = performance.now();
+      const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
+
+      const tick = (now) => {
+        const elapsed = now - startTime;
+        const progress = Math.min(1, elapsed / WHEEL_SCROLL_DURATION_MS);
+        root.scrollTop = startTop + distance * easeOutCubic(progress);
+        if (progress < 1) {
+          wheelScrollRafRef.current = requestAnimationFrame(tick);
+        } else {
+          wheelScrollRafRef.current = null;
+        }
+      };
+
+      wheelScrollRafRef.current = requestAnimationFrame(tick);
+    };
+
     const onWheel = (e) => {
       let el = e.target;
       while (el && el !== root) {
@@ -133,11 +164,17 @@ export default function HomePage({
       e.preventDefault();
       const step = root.clientHeight;
       const dir = e.deltaY > 0 ? 1 : -1;
-      root.scrollBy({ top: dir * step, behavior: 'auto' });
+      animateWheelScrollBy(dir * step);
     };
 
     root.addEventListener('wheel', onWheel, { passive: false });
-    return () => root.removeEventListener('wheel', onWheel);
+    return () => {
+      root.removeEventListener('wheel', onWheel);
+      if (wheelScrollRafRef.current) {
+        cancelAnimationFrame(wheelScrollRafRef.current);
+        wheelScrollRafRef.current = null;
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -279,7 +316,7 @@ export default function HomePage({
           className={`scrollbar-hide min-h-0 flex-1 snap-y snap-mandatory overflow-x-hidden overscroll-y-contain pb-main-scroll-bottom ${
             orderStackedWizardSteps ? 'overflow-y-hidden' : 'overflow-y-auto'
           }`}
-          style={{ WebkitOverflowScrolling: 'touch' }}
+          style={{ WebkitOverflowScrolling: 'touch', scrollBehavior: 'smooth' }}
         >
           <section
             id={SECTION_IDS.hero}
